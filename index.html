@@ -2,1625 +2,1080 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>World404 Theme Parks - Physical World Digital Reconstruction</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>404WORLD | Powered by AIF.GLASS</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Syncopate:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #3498db;
-            --secondary: #8e44ad;
-            --accent: #00ff9d;
-            --dark: #0a0a0a;
-            --neon-blue: #00d4ff;
-            --neon-purple: #b347d9;
-            --neon-green: #39ff14;
-            --neon-orange: #ff6b35;
-            --neon-pink: #ff3fb4;
-            --neon-gold: #ffd700;
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff0055;
+            --neon-purple: #bc13fe;
+            --neon-yellow: #faff00;
+            --dark-bg: #030305;
+            --panel-bg: rgba(10, 10, 16, 0.95); /* Increased opacity for better readability */
+            --grid-line: rgba(0, 243, 255, 0.1);
         }
-        
-        * {
-            box-sizing: border-box;
-        }
-        
+
+        /* 基础设置 */
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #000 0%, #0a0a2e 50%, #1a1a4e 100%);
-            color: #ffffff;
+            font-family: 'Rajdhani', 'Noto Sans TC', sans-serif;
+            background-color: var(--dark-bg);
+            color: #fff;
             overflow-x: hidden;
-            line-height: 1.6;
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center top;
         }
         
-        .theme-park-bg {
-            position: fixed;
+        /* 字体 */
+        .font-cyber { font-family: 'Syncopate', sans-serif; }
+        .font-tech { font-family: 'Rajdhani', sans-serif; }
+
+        /* HUD 风格容器 */
+        .hud-panel {
+            background: var(--panel-bg);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            position: relative;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            clip-path: polygon(
+                0 10px, 10px 0, 
+                calc(100% - 10px) 0, 100% 10px, 
+                100% calc(100% - 10px), calc(100% - 10px) 100%, 
+                10px 100%, 0 calc(100% - 10px)
+            );
+            transition: all 0.3s ease;
+        }
+
+        .hud-panel:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.15);
+        }
+
+        /* HUD 角落装饰 */
+        .hud-corner::before, .hud-corner::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border: 2px solid var(--neon-cyan);
+            transition: all 0.3s ease;
+        }
+        .hud-corner::before { top: 0; left: 0; border-right: none; border-bottom: none; }
+        .hud-corner::after { bottom: 0; right: 0; border-left: none; border-top: none; }
+        
+        .hud-panel:hover .hud-corner::before { width: 100%; height: 100%; opacity: 0.1; background: var(--neon-cyan); }
+
+        /* 故障文字效果 */
+        .glitch-text {
+            position: relative;
+            color: #fff;
+        }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                radial-gradient(circle at 25% 25%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(57, 255, 20, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 63, 180, 0.08) 0%, transparent 50%);
-            z-index: -2;
-            animation: parkAmbience 25s ease-in-out infinite;
+            background: var(--dark-bg);
         }
-        
-        @keyframes parkAmbience {
-            0%, 100% { opacity: 0.8; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -1px 0 var(--neon-pink);
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
         }
-        
-        .logo-font {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 2.2rem;
-            letter-spacing: 4px;
-            background: linear-gradient(45deg, var(--neon-blue), var(--accent), var(--neon-purple));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 30px rgba(0, 255, 157, 0.5);
-            animation: logoGlow 4s ease-in-out infinite alternate;
-        }
-        
-        @keyframes logoGlow {
-            0% { 
-                text-shadow: 0 0 20px rgba(0, 255, 157, 0.5);
-                filter: brightness(1);
-            }
-            100% { 
-                text-shadow: 0 0 40px rgba(0, 255, 157, 0.8), 0 0 60px rgba(0, 212, 255, 0.6);
-                filter: brightness(1.3);
-            }
-        }
-        
-        .gradient-text {
-            background: linear-gradient(45deg, var(--neon-blue), var(--accent), var(--neon-purple));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            font-weight: 800;
-        }
-        
-        .glass-card {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
+        .glitch-text::after {
             left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, transparent, rgba(0, 255, 157, 0.3), transparent);
-            border-radius: 24px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: -1;
+            text-shadow: -1px 0 var(--neon-cyan);
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
         }
-        
-        .glass-card:hover::before {
-            opacity: 1;
+
+        @keyframes glitch-anim {
+            0% { clip: rect(14px, 9999px, 129px, 0); }
+            20% { clip: rect(88px, 9999px, 8px, 0); }
+            40% { clip: rect(26px, 9999px, 140px, 0); }
+            60% { clip: rect(69px, 9999px, 66px, 0); }
+            80% { clip: rect(106px, 9999px, 16px, 0); }
+            100% { clip: rect(32px, 9999px, 126px, 0); }
         }
-        
-        .glass-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: rgba(0, 255, 157, 0.4);
-            box-shadow: 0 25px 50px rgba(0, 255, 157, 0.2);
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(122px, 9999px, 14px, 0); }
+            20% { clip: rect(27px, 9999px, 59px, 0); }
+            40% { clip: rect(58px, 9999px, 92px, 0); }
+            60% { clip: rect(98px, 9999px, 128px, 0); }
+            80% { clip: rect(11px, 9999px, 32px, 0); }
+            100% { clip: rect(63px, 9999px, 83px, 0); }
         }
-        
-        .navbar {
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 255, 157, 0.2);
+
+        /* 扫描线效果 */
+        .scanline {
             position: fixed;
+            left: 0;
+            top: 0;
             width: 100%;
-            z-index: 1000;
-            transition: all 0.3s ease;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0, 255, 255, 0.02) 51%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9999;
         }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-            border: none;
-            font-weight: 700;
-            transition: all 0.3s ease;
+
+        /* 按钮样式 */
+        .btn-cyber {
+            background: transparent;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 2px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            transition: all 0.3s;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
         }
         
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.5);
-        }
-        
-        .btn-secondary {
-            background: rgba(0, 255, 157, 0.1);
-            border: 2px solid var(--accent);
-            color: var(--accent);
-            font-weight: 700;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-        
-        .btn-secondary:hover {
-            background: var(--accent);
+        .btn-cyber:hover {
+            background: var(--neon-cyan);
             color: #000;
-            transform: translateY(-3px);
-            box-shadow: 0 20px 40px rgba(0, 255, 157, 0.4);
+            box-shadow: 0 0 20px var(--neon-cyan);
+            text-shadow: none;
         }
-        
-        .hero-3d {
-            perspective: 1000px;
-            transform-style: preserve-3d;
-        }
-        
-        .park-visual {
-            width: 400px;
-            height: 300px;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(255, 107, 53, 0.3));
-            border-radius: 30px;
-            border: 2px solid rgba(0, 255, 157, 0.5);
-            position: relative;
-            margin: 0 auto;
-            transform: rotateX(15deg) rotateY(-10deg);
-            transition: transform 0.5s ease;
-            box-shadow: 
-                0 0 50px rgba(0, 255, 157, 0.3),
-                inset 0 0 30px rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-        }
-        
-        .park-visual:hover {
-            transform: rotateX(10deg) rotateY(-5deg) scale(1.05);
-        }
-        
-        .experience-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-        
-        .experience-card {
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 24px;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-        }
-        
-        .experience-card.roller-coaster {
-            border-color: var(--neon-blue);
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 212, 255, 0.05));
-        }
-        
-        .experience-card.story-mode {
+
+        .btn-vip {
             border-color: var(--neon-purple);
-            background: linear-gradient(135deg, rgba(179, 71, 217, 0.1), rgba(179, 71, 217, 0.05));
+            color: var(--neon-purple);
         }
-        
-        .experience-card.multiplayer {
-            border-color: var(--neon-green);
-            background: linear-gradient(135deg, rgba(57, 255, 20, 0.1), rgba(57, 255, 20, 0.05));
+        .btn-vip:hover {
+            background: var(--neon-purple);
+            color: #fff;
+            box-shadow: 0 0 20px var(--neon-purple);
         }
-        
-        .experience-card.time-travel {
-            border-color: var(--neon-orange);
-            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 107, 53, 0.05));
+
+        /* 移动端菜单修正 */
+        .mobile-menu-drawer {
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            background-color: #050505; /* Ensure solid background */
+            border-left: 1px solid var(--neon-cyan);
         }
-        
-        .experience-card.ai-guide {
-            border-color: var(--neon-gold);
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+        .mobile-menu-open .mobile-menu-drawer {
+            transform: translateX(0);
         }
-        
-        .experience-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(0, 255, 157, 0.2);
+        .mobile-menu-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            background-color: rgba(0,0,0,0.9); /* Darker overlay */
         }
-        
-        .experience-image {
-            height: 200px;
-            background-size: cover;
-            background-position: center;
+        .mobile-menu-open .mobile-menu-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* 3D 旋转模型容器 */
+        .model-viewer {
             position: relative;
-            overflow: hidden;
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
         }
-        
-        .experience-overlay {
-            position: absolute;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Modal Styles */
+        .park-modal {
+            position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, rgba(0, 212, 255, 0.3), rgba(179, 71, 217, 0.3));
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
             opacity: 0;
+            pointer-events: none;
             transition: opacity 0.3s ease;
         }
         
-        .experience-card:hover .experience-overlay {
+        .park-modal.active {
             opacity: 1;
+            pointer-events: auto;
         }
-        
-        .global-parks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
+
+        .modal-content {
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: #0a0a0e;
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
         }
-        
-        .park-card {
-            background: rgba(0, 0, 0, 0.8);
-            border-radius: 24px;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            cursor: pointer;
-            position: relative;
-            border: 2px solid transparent;
+
+        .park-modal.active .modal-content {
+            transform: scale(1);
         }
-        
-        .park-card.tokyo {
-            border-color: var(--neon-pink);
-        }
-        
-        .park-card.orlando {
-            border-color: var(--neon-blue);
-        }
-        
-        .park-card.shanghai {
-            border-color: var(--neon-gold);
-        }
-        
-        .park-card.london {
-            border-color: var(--neon-purple);
-        }
-        
-        .park-card.mobile {
-            border-color: var(--neon-green);
-        }
-        
-        .park-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(0, 255, 157, 0.3);
-        }
-        
-        .park-image {
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-        
-        .park-badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            backdrop-filter: blur(10px);
-        }
-        
-        .park-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-        
-        .feature-card {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 157, 0.1), transparent);
-            transition: left 0.8s;
-        }
-        
-        .feature-card:hover::before {
-            left: 100%;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-            box-shadow: 0 20px 40px rgba(0, 255, 157, 0.2);
-        }
-        
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 1.5rem;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-            transition: all 0.3s ease;
-        }
-        
-        .ar-ride-simulator {
-            position: relative;
-            width: 100%;
-            max-width: 800px;
-            height: 400px;
-            margin: 0 auto;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(255, 107, 53, 0.2));
-            border-radius: 24px;
-            overflow: hidden;
-            border: 2px solid rgba(0, 255, 157, 0.3);
-        }
-        
-        .ride-track {
-            position: absolute;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-green));
-            top: 50%;
-            transform: translateY(-50%);
-            animation: rideProgress 8s ease-in-out infinite;
-        }
-        
-        @keyframes rideProgress {
-            0% { width: 0%; left: 0%; }
-            50% { width: 70%; left: 15%; }
-            100% { width: 0%; left: 100%; }
-        }
-        
-        .ar-overlay {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 1rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            border: 1px solid var(--neon-green);
-        }
-        
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 100%;
-            max-width: 400px;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.98);
-            backdrop-filter: blur(20px);
-            z-index: 2000;
-            transition: right 0.3s ease;
-            padding: 2rem;
-            border-left: 1px solid rgba(0, 255, 157, 0.3);
-        }
-        
-        .mobile-menu.open {
-            right: 0;
-        }
-        
-        .mobile-menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1500;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .mobile-menu-overlay.open {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        /* 修正底部菜单布局 */
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-bottom {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        @media (min-width: 768px) {
-            .footer-bottom {
-                flex-direction: row;
-            }
-        }
-        
-        .footer-links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1rem;
-        }
-        
-        /* 修正门票卡片布局 */
-        .tickets-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        /* Mobile Optimizations */
+
+        /* 滚动条 */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--neon-cyan); border-radius: 3px; }
+
+        /* 响应式排版微调 */
         @media (max-width: 768px) {
-            .logo-font {
-                font-size: 1.6rem;
-                letter-spacing: 2px;
-            }
-            
-            .experience-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .global-parks-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .park-features {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .park-visual {
-                width: 300px;
-                height: 200px;
-            }
-            
-            .ar-ride-simulator {
-                height: 300px;
-            }
-            
-            .desktop-nav {
-                display: none;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .footer-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .desktop-nav {
-            display: flex;
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-        }
-        
-        @media (max-width: 768px) {
-            .desktop-nav {
-                display: none;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-        }
-        
-        .countdown-timer {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        
-        .timer-unit {
-            text-align: center;
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 12px;
-            padding: 1rem;
-            border: 1px solid rgba(0, 255, 157, 0.3);
-        }
-        
-        .timer-number {
-            display: block;
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--neon-green);
-        }
-        
-        .timer-label {
-            font-size: 0.8rem;
-            color: #aaa;
+            .glitch-text { font-size: 2.5rem !important; }
+            .section-title { font-size: 1.8rem !important; }
         }
     </style>
 </head>
 <body>
-    <!-- Theme Park Background -->
-    <div class="theme-park-bg"></div>
-    
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
-    
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex justify-between items-center">
-                <a href="/" class="logo-font">404GLASS</a>
-                
-                <!-- Desktop Navigation -->
-                <div class="desktop-nav space-x-8">
-                    <a href="/" class="hover:text-blue-400 transition font-medium">Home</a>
-                    <a href="#experiences" class="hover:text-blue-400 transition font-medium">Experiences</a>
-                    <a href="#parks" class="hover:text-blue-400 transition font-medium">Global Parks</a>
-                    <a href="#features" class="hover:text-blue-400 transition font-medium">Park Features</a>
-                    <a href="#tickets" class="hover:text-blue-400 transition font-medium">Tickets</a>
+    <!-- 全局扫描线特效 -->
+    <div class="scanline"></div>
+
+    <!-- 导航栏 -->
+    <nav class="fixed w-full top-0 z-50 bg-black/90 backdrop-blur-lg border-b border-white/10">
+        <div class="container mx-auto px-4 h-20 flex justify-between items-center">
+            <!-- LOGO -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 border-2 border-cyan-400 rounded-sm flex items-center justify-center relative overflow-hidden group-hover:border-pink-500 transition-colors">
+                    <i class="fas fa-vr-cardboard text-xl text-white"></i>
+                    <div class="absolute inset-0 bg-cyan-400/20 animate-pulse"></div>
                 </div>
-                
-                <div class="flex items-center space-x-4">
-                    <button class="btn-secondary px-6 py-2 rounded-full text-sm desktop-nav">Book Experience</button>
-                    <button class="mobile-menu-btn text-white text-xl" id="mobileMenuBtn">
-                        <i class="fas fa-bars"></i>
-                    </button>
+                <div class="flex flex-col">
+                    <span class="font-cyber text-2xl font-bold tracking-widest text-white leading-none">404<span class="text-cyan-400">WORLD</span></span>
+                    <span class="text-[10px] tracking-[0.3em] text-gray-400 group-hover:text-pink-500 transition-colors">POWERED BY AIF.GLASS</span>
                 </div>
+            </a>
+
+            <!-- 桌面菜单 -->
+            <div class="hidden lg:flex items-center space-x-8">
+                <a href="#glass" class="text-sm font-bold tracking-widest hover:text-cyan-400 transition" data-i18n="nav_glass">AIF.GLASS</a>
+                <a href="#experiences" class="text-sm font-bold tracking-widest hover:text-cyan-400 transition" data-i18n="nav_experiences">MODULES</a>
+                <a href="#parks" class="text-sm font-bold tracking-widest hover:text-cyan-400 transition" data-i18n="nav_parks">LOCATIONS</a>
+                <a href="#tickets" class="text-sm font-bold tracking-widest hover:text-cyan-400 transition" data-i18n="nav_tickets">ACCESS</a>
+                
+                <!-- 语言切换 -->
+                <div class="flex border border-gray-700 rounded-sm overflow-hidden">
+                    <button onclick="setLang('en')" id="langEnDesk" class="px-3 py-1 text-xs font-bold bg-cyan-900/50 text-cyan-400 hover:bg-cyan-400 hover:text-black transition">EN</button>
+                    <button onclick="setLang('tc')" id="langTcDesk" class="px-3 py-1 text-xs font-bold text-gray-500 hover:bg-cyan-400 hover:text-black transition">繁體</button>
+                </div>
+
+                <button class="btn-cyber px-6 py-2 text-sm font-bold" data-i18n="btn_connect">
+                    SYSTEM LOGIN
+                </button>
             </div>
-        </div>
-    </nav>
-    
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="flex justify-between items-center mb-8">
-            <div class="logo-font text-xl">404GLASS</div>
-            <button class="text-white text-xl" id="mobileMenuClose">
-                <i class="fas fa-times"></i>
+
+            <!-- 移动端汉堡菜单按钮 -->
+            <button onclick="toggleMobileMenu()" class="lg:hidden text-2xl text-white hover:text-cyan-400 transition z-50 relative">
+                <i class="fas fa-bars"></i>
             </button>
         </div>
-        
-        <nav class="space-y-6">
-            <a href="/" class="block text-xl hover:text-blue-400 transition">Home</a>
-            <a href="#experiences" class="block text-xl hover:text-blue-400 transition">Experiences</a>
-            <a href="#parks" class="block text-xl hover:text-blue-400 transition">Global Parks</a>
-            <a href="#features" class="block text-xl hover:text-blue-400 transition">Park Features</a>
-            <a href="#tickets" class="block text-xl hover:text-blue-400 transition">Tickets</a>
-        </nav>
-        
-        <div class="mt-8 pt-8 border-t border-gray-700">
-            <button class="btn-primary w-full py-3 rounded-full font-medium">Book Experience</button>
+    </nav>
+
+    <!-- 移动端侧边栏 - Z-Index 修正 -->
+    <div id="mobileMenuContainer" class="relative z-[100]">
+        <div class="mobile-menu-overlay fixed inset-0 bg-black/90 z-[101]" onclick="toggleMobileMenu()"></div>
+        <div class="mobile-menu-drawer fixed top-0 right-0 w-[85%] max-w-sm h-full bg-[#050505] z-[102] p-8 flex flex-col shadow-[0_0_50px_rgba(0,243,255,0.2)]">
+            <div class="flex justify-between items-center mb-12 border-b border-gray-800 pb-4">
+                <span class="font-cyber text-2xl text-white">SYSTEM <span class="text-cyan-400">MENU</span></span>
+                <button onclick="toggleMobileMenu()" class="text-gray-400 text-2xl hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="flex flex-col space-y-8 font-cyber text-xl">
+                <a href="#glass" onclick="toggleMobileMenu()" class="flex items-center gap-4 hover:text-cyan-400 transition group">
+                    <div class="w-8 h-8 flex items-center justify-center border border-gray-700 group-hover:border-cyan-400 rounded"><i class="fas fa-glasses text-sm text-gray-500 group-hover:text-cyan-400"></i></div> 
+                    <span data-i18n="nav_glass">AIF.GLASS</span>
+                </a>
+                <a href="#experiences" onclick="toggleMobileMenu()" class="flex items-center gap-4 hover:text-cyan-400 transition group">
+                     <div class="w-8 h-8 flex items-center justify-center border border-gray-700 group-hover:border-cyan-400 rounded"><i class="fas fa-gamepad text-sm text-gray-500 group-hover:text-cyan-400"></i></div>
+                     <span data-i18n="nav_experiences">MODULES</span>
+                </a>
+                <a href="#parks" onclick="toggleMobileMenu()" class="flex items-center gap-4 hover:text-cyan-400 transition group">
+                     <div class="w-8 h-8 flex items-center justify-center border border-gray-700 group-hover:border-cyan-400 rounded"><i class="fas fa-globe text-sm text-gray-500 group-hover:text-cyan-400"></i></div>
+                     <span data-i18n="nav_parks">LOCATIONS</span>
+                </a>
+                <a href="#tickets" onclick="toggleMobileMenu()" class="flex items-center gap-4 hover:text-cyan-400 transition group">
+                     <div class="w-8 h-8 flex items-center justify-center border border-gray-700 group-hover:border-cyan-400 rounded"><i class="fas fa-ticket-alt text-sm text-gray-500 group-hover:text-cyan-400"></i></div>
+                     <span data-i18n="nav_tickets">ACCESS</span>
+                </a>
+            </div>
+
+            <div class="mt-auto pt-8 border-t border-gray-800">
+                <div class="flex items-center justify-between mb-6">
+                    <span class="text-xs text-gray-500 tracking-widest">INTERFACE LANGUAGE</span>
+                    <div class="flex gap-2">
+                        <button onclick="setLang('en')" id="langEnMob" class="text-xs font-bold text-cyan-400 border border-cyan-400 px-2 py-1">EN</button>
+                        <button onclick="setLang('tc')" id="langTcMob" class="text-xs font-bold text-gray-500 border border-gray-700 px-2 py-1">繁體</button>
+                    </div>
+                </div>
+                <button class="btn-cyber w-full py-4 font-bold" data-i18n="btn_connect">INITIALIZE LINK</button>
+            </div>
         </div>
     </div>
-    
-    <!-- Hero Section -->
-    <section class="py-20 pt-32">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h1 class="text-5xl lg:text-7xl font-black leading-tight mb-6">
-                    World404 <span class="gradient-text">Theme Parks</span>
-                </h1>
-                <p class="text-2xl lg:text-3xl text-gray-300 mb-4">
-                    Physical World Digital Reconstruction
-                </p>
-                <p class="text-xl text-gray-400 max-w-4xl mx-auto mb-8">
-                    Where reality meets infinite possibility. Experience theme parks that adapt to you, 
-                    creating personalized adventures that blur the line between physical and digital worlds.
-                </p>
-                
-                <!-- Opening Countdown -->
-                <div class="mb-8">
-                    <p class="text-lg text-gray-400 mb-4">First Park Opens In:</p>
-                    <div class="countdown-timer">
-                        <div class="timer-unit">
-                            <span class="timer-number" id="days">365</span>
-                            <span class="timer-label">Days</span>
+
+    <!-- Hero Section: 视觉冲击与概念展示 -->
+    <section class="relative pt-32 pb-20 min-h-screen flex items-center overflow-hidden">
+        <!-- 动态背景装饰 - 修正图片 -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] animate-pulse"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-600/20 rounded-full blur-[100px] animate-pulse" style="animation-delay: 2s;"></div>
+            <!-- 更换为更有“故障感”和赛博朋克氛围的城市图片 -->
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <!-- 文字区 -->
+                <div class="w-full lg:w-1/2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 border border-pink-500/50 bg-pink-500/10 text-pink-400 text-xs font-mono mb-8 tracking-widest">
+                        <span class="w-2 h-2 bg-pink-500 rounded-full animate-ping"></span>
+                        <span data-i18n="hero_status">LIVE: TOKYO NODE CONSTRUCTING</span>
+                    </div>
+                    
+                    <h1 class="font-cyber text-6xl lg:text-8xl font-bold leading-tight mb-6 glitch-text" data-text="REALITY PATCHED" data-i18n="hero_title">
+                        REALITY<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">PATCHED</span>
+                    </h1>
+                    
+                    <p class="text-lg text-gray-300 mb-10 max-w-xl border-l-2 border-cyan-500 pl-6 leading-relaxed" data-i18n="hero_desc">
+                        Welcome to 404WORLD. Not a theme park, but a digital operating system overlaid on the physical world. <br><br>
+                        Requires <strong class="text-white">AIF.GLASS</strong> hardware to render. Without it, you see nothing. With it, you see everything.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-6">
+                        <button class="btn-cyber px-8 py-4 text-lg font-bold flex items-center justify-center gap-3 group">
+                            <i class="fas fa-download group-hover:animate-bounce"></i> <span data-i18n="btn_download_os">DOWNLOAD OS</span>
+                        </button>
+                        <button class="px-8 py-4 border border-white/20 text-white hover:bg-white/10 transition flex items-center justify-center gap-3">
+                            <i class="fas fa-play"></i> <span data-i18n="btn_watch_demo">WATCH DEMO</span>
+                        </button>
+                    </div>
+
+                    <!-- 数据统计 -->
+                    <div class="grid grid-cols-3 gap-8 mt-16 pt-8 border-t border-gray-800">
+                        <div>
+                            <div class="text-3xl font-bold text-cyan-400 font-tech">0.02ms</div>
+                            <div class="text-xs text-gray-500 tracking-widest">LATENCY</div>
                         </div>
-                        <div class="timer-unit">
-                            <span class="timer-number" id="hours">12</span>
-                            <span class="timer-label">Hours</span>
+                        <div>
+                            <div class="text-3xl font-bold text-purple-400 font-tech">8K</div>
+                            <div class="text-xs text-gray-500 tracking-widest">RESOLUTION</div>
                         </div>
-                        <div class="timer-unit">
-                            <span class="timer-number" id="minutes">30</span>
-                            <span class="timer-label">Minutes</span>
-                        </div>
-                        <div class="timer-unit">
-                            <span class="timer-number" id="seconds">45</span>
-                            <span class="timer-label">Seconds</span>
+                        <div>
+                            <div class="text-3xl font-bold text-pink-400 font-tech">∞</div>
+                            <div class="text-xs text-gray-500 tracking-widest">POSSIBILITIES</div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Hero Visual -->
-            <div class="hero-3d mb-16">
-                <div class="park-visual">
-                    <!-- AR Ride Simulator -->
-                    <div class="ar-ride-simulator">
-                        <div class="ride-track"></div>
-                        <div class="ar-overlay">
-                            <div class="text-xs text-green-400 mb-1">🚀 AR ENHANCED RIDE</div>
-                            <div class="text-sm">Personal Adventure: Space Mission</div>
-                            <div class="text-xs text-gray-400">Adapting to: John's preferences</div>
-                        </div>
+
+                <!-- 视觉演示区 -->
+                <div class="w-full lg:w-1/2">
+                    <div class="model-viewer relative">
+                        <!-- 装饰框 -->
+                        <div class="absolute -inset-4 border border-cyan-500/30 rounded-lg"></div>
+                        <div class="absolute -inset-4 border border-purple-500/30 rounded-lg rotate-2"></div>
                         
-                        <!-- Floating AR Elements -->
-                        <div class="absolute top-16 right-16 w-8 h-8 bg-blue-400 rounded-full opacity-60 animate-pulse"></div>
-                        <div class="absolute bottom-20 left-20 w-6 h-6 bg-purple-400 rounded-full opacity-70 animate-pulse" style="animation-delay: 0.5s;"></div>
-                        <div class="absolute top-32 left-1/2 w-4 h-4 bg-green-400 rounded-full opacity-80 animate-pulse" style="animation-delay: 1s;"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Immersive Theme Park Experiences -->
-    <section class="py-20" id="experiences">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl lg:text-5xl font-bold mb-6">
-                    Immersive <span class="gradient-text">Park Experiences</span>
-                </h2>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                    Revolutionary attractions that combine physical thrills with personalized digital narratives, 
-                    creating unique adventures for every visitor.
-                </p>
-            </div>
-            
-            <div class="experience-grid">
-                <!-- Reality-Enhanced Rides -->
-                <div class="experience-card roller-coaster glass-card">
-                    <div class="experience-image" style="background-image: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
-                        <div class="experience-overlay">
-                            <div class="text-center">
-                                <div class="text-4xl mb-2">🎢</div>
-                                <h3 class="text-xl font-bold">Experience Now</h3>
+                        <!-- 主图 - 换成更具互动感的AR视角图 -->
+                        <div class="hud-panel p-2 rounded-lg overflow-hidden relative group bg-black">
+                            <img src="https://images.unsplash.com/photo-1592478411213-61535fdd861d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="AR Vision" class="w-full rounded opacity-80 group-hover:opacity-100 transition duration-500">
+                            
+                            <!-- HUD 叠加层 -->
+                            <div class="absolute inset-0 pointer-events-none">
+                                <div class="absolute top-4 left-4 flex flex-col gap-1">
+                                    <span class="text-[10px] bg-red-500 text-white px-1">REC</span>
+                                    <span class="text-[10px] text-cyan-400 font-mono">ISO 12800</span>
+                                </div>
+                                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border border-cyan-400/50 w-24 h-24 rounded-full flex items-center justify-center">
+                                    <div class="w-1 h-1 bg-cyan-400 rounded-full"></div>
+                                    <div class="absolute w-full h-full border-t border-cyan-400/30 animate-spin"></div>
+                                </div>
+                                <div class="absolute bottom-10 left-4 text-xs font-mono text-cyan-300 bg-black/70 px-4 py-2 border border-cyan-500/30 backdrop-blur-sm">
+                                    > TARGET: ROLLER COASTER<br>
+                                    > VELOCITY: 120 KM/H<br>
+                                    > G-FORCE: 4.5G<br>
+                                    > SKIN: NEON_DRAGON_V2
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3" style="color: var(--neon-blue);">Reality-Enhanced Rides</h3>
-                        <p class="text-gray-300 mb-4">
-                            Traditional roller coasters transformed with personalized adventure storylines. 
-                            Each ride becomes a unique journey through space, fantasy realms, or historical events.
-                        </p>
-                        <div class="space-y-2 text-sm text-gray-400">
-                            <div class="flex items-center">
-                                <i class="fas fa-bolt text-blue-400 mr-3"></i>
-                                Real-time story adaptation based on rider preferences
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-eye text-blue-400 mr-3"></i>
-                                360° immersive visuals synchronized with physical motion
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-heart text-blue-400 mr-3"></i>
-                                Biometric feedback integration for optimal experience
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Interactive Story Mode -->
-                <div class="experience-card story-mode glass-card">
-                    <div class="experience-image" style="background-image: url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
-                        <div class="experience-overlay">
-                            <div class="text-center">
-                                <div class="text-4xl mb-2">📖</div>
-                                <h3 class="text-xl font-bold">Start Story</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3" style="color: var(--neon-purple);">Interactive Story Experiences</h3>
-                        <p class="text-gray-300 mb-4">
-                            Become the protagonist in real-time generated storylines. Your choices, reactions, 
-                            and personal history shape the narrative as you explore themed areas.
-                        </p>
-                        <div class="space-y-2 text-sm text-gray-400">
-                            <div class="flex items-center">
-                                <i class="fas fa-user text-purple-400 mr-3"></i>
-                                You are the main character in every adventure
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-brain text-purple-400 mr-3"></i>
-                                AI weaves your personal memories into the story
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-infinity text-purple-400 mr-3"></i>
-                                Infinite storyline variations and endings
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Multiplayer Adventures -->
-                <div class="experience-card multiplayer glass-card">
-                    <div class="experience-image" style="background-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
-                        <div class="experience-overlay">
-                            <div class="text-center">
-                                <div class="text-4xl mb-2">👥</div>
-                                <h3 class="text-xl font-bold">Join Quest</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3" style="color: var(--neon-green);">Multiplayer Collaborative Adventures</h3>
-                        <p class="text-gray-300 mb-4">
-                            Team up with family and friends for AR puzzle games and collaborative quests. 
-                            Solve mysteries, complete challenges, and create shared memories together.
-                        </p>
-                        <div class="space-y-2 text-sm text-gray-400">
-                            <div class="flex items-center">
-                                <i class="fas fa-users text-green-400 mr-3"></i>
-                                Up to 8 players in synchronized experiences
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-puzzle-piece text-green-400 mr-3"></i>
-                                Collaborative AR puzzle solving
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-trophy text-green-400 mr-3"></i>
-                                Shared achievements and team rewards
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Time Travel Experiences -->
-                <div class="experience-card time-travel glass-card">
-                    <div class="experience-image" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
-                        <div class="experience-overlay">
-                            <div class="text-center">
-                                <div class="text-4xl mb-2">⏰</div>
-                                <h3 class="text-xl font-bold">Travel Time</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3" style="color: var(--neon-orange);">Time-Space Travel Experiences</h3>
-                        <p class="text-gray-300 mb-4">
-                            Experience the same physical location across multiple historical periods. 
-                            Walk through ancient civilizations, witness historical events, or explore future possibilities.
-                        </p>
-                        <div class="space-y-2 text-sm text-gray-400">
-                            <div class="flex items-center">
-                                <i class="fas fa-history text-orange-400 mr-3"></i>
-                                Multiple historical time periods per location
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-globe text-orange-400 mr-3"></i>
-                                Historically accurate reconstructions
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-rocket text-orange-400 mr-3"></i>
-                                Future timeline explorations
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- AI Personal Guide -->
-                <div class="experience-card ai-guide glass-card">
-                    <div class="experience-image" style="background-image: url('https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
-                        <div class="experience-overlay">
-                            <div class="text-center">
-                                <div class="text-4xl mb-2">🤖</div>
-                                <h3 class="text-xl font-bold">Meet Guide</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3" style="color: var(--neon-gold);">AI Personal Guide System</h3>
-                        <p class="text-gray-300 mb-4">
-                            Your intelligent companion that learns your preferences and creates personalized 
-                            routes, experiences, and recommendations throughout your park visit.
-                        </p>
-                        <div class="space-y-2 text-sm text-gray-400">
-                            <div class="flex items-center">
-                                <i class="fas fa-route text-yellow-400 mr-3"></i>
-                                Intelligent route planning based on interests
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-clock text-yellow-400 mr-3"></i>
-                                Real-time wait time optimization
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-star text-yellow-400 mr-3"></i>
-                                Personalized hidden content discovery
-                            </div>
+                            
+                            <!-- 扫描动画 -->
+                            <div class="absolute top-0 left-0 w-full h-1 bg-cyan-400 shadow-[0_0_20px_rgba(0,255,255,0.8)] animate-[scan_2s_linear_infinite]"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    
-    <!-- Global Theme Park Network -->
-    <section class="py-20 bg-gradient-to-r from-blue-900/10 to-purple-900/10" id="parks">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl lg:text-5xl font-bold mb-6">
-                    Global <span class="gradient-text">Park Network</span>
-                </h2>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                    World404 theme parks around the globe, each offering unique cultural experiences 
-                    enhanced by cutting-edge AI and AR technology.
-                </p>
-            </div>
-            
-            <div class="global-parks-grid">
-                <!-- World404 Tokyo -->
-                <div class="park-card tokyo glass-card">
-                    <div class="park-image" style="background-image: url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
-                        <div class="park-badge" style="background: rgba(255, 63, 180, 0.2); color: var(--neon-pink);">
-                            Opening 2027
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3" style="color: var(--neon-pink);">World404 Tokyo</h3>
-                        <p class="text-gray-300 mb-4">
-                            Japanese culture meets AI innovation. Experience traditional festivals, anime worlds, 
-                            and futuristic technology seamlessly blended in the heart of Tokyo.
-                        </p>
-                        <div class="grid grid-cols-2 gap-4 text-sm">
-                            <div class="bg-black/30 rounded-lg p-3 text-center">
-                                <div class="text-lg font-bold text-pink-400">50+</div>
-                                <div class="text-gray-400">Anime Worlds</div>
+
+    <!-- AIF.GLASS Hardware Integration Section -->
+    <section id="glass" class="py-24 bg-black relative border-y border-white/5">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row gap-12 items-center">
+                <div class="w-full md:w-1/2 order-2 md:order-1">
+                    <div class="relative group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-cyan-400 to-purple-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="relative rounded-lg grayscale hover:grayscale-0 transition duration-700 w-full object-cover h-[500px] border border-gray-800">
+                        <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent h-48"></div>
+                        <!-- Tech Specs Overlay -->
+                        <div class="absolute bottom-8 left-8 right-8">
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="text-cyan-400 font-cyber text-xl mb-1">AIF.GLASS PRO</div>
+                                    <div class="text-gray-400 text-xs tracking-widest">HARDWARE REQUIRED</div>
+                                </div>
+                                <i class="fas fa-fingerprint text-4xl text-gray-600 group-hover:text-cyan-400 transition"></i>
                             </div>
-                            <div class="bg-black/30 rounded-lg p-3 text-center">
-                                <div class="text-lg font-bold text-pink-400">12</div>
-                                <div class="text-gray-400">Cultural Zones</div>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <button class="btn-secondary w-full py-2 rounded-full text-sm">Get Early Access</button>
                         </div>
                     </div>
                 </div>
-                
-                <!-- World404 Orlando -->
-                <div class="park-card orlando glass-card">
-                    <div class="park-image" style="background-image: url('https://images.unsplash.com/photo-1569163139394-de4e4f43e4e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
-                        <div class="park-badge" style="background: rgba(0, 212, 255, 0.2); color: var(--neon-blue);">
-                            Opening 2028
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3" style="color: var(--neon-blue);">World404 Orlando</h3>
-                        <p class="text-gray-300 mb-4">
-                            Disney-level immersion with infinite personalization. Classic storytelling 
-                            meets AI-native experiences in the theme park capital of the world.
-                        </p>
-                        <div class="grid grid-cols-2 gap-4 text-sm">
-                            <div class="bg-black/30 rounded-lg p-3 text-center">
-                                <div class="text-lg font-bold text-blue-400">8</div>
-                                <div class="text-gray-400">Themed Lands</div>
-                            </div>
-                            <div class="bg-black/30 rounded-lg p-3 text-center">
-                                <div class="text-lg font-bold text-blue-400">25+</div>
-                                <div class="text-gray-400">AR Attractions</div>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <button class="btn-secondary w-full py-2 rounded-full text-sm">Join Waitlist</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- World404 Shanghai -->
-                <div class="park-card shanghai glass-card">
-                    <div class="park-image" style="background-image: url('https://images.unsplash.com/photo-1538301992395-1d7dc1e19b41?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
-                        <div class="park-badge" style="background: rgba(255, 215, 0, 0.2); color: var(--neon-gold);">
-                            Opening 2028
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3" style="color: var(--neon-gold);">World404 Shanghai</h3>
-                        <p class="text-gray-300 mb-4">
-                            5,000 years of Chinese civilization digitally recreated. Journey through dynasties, 
-                            experience ancient legends, and witness the future of China.
-                        </p>
-                        <div class="grid grid-cols-2 gap-4 text-sm">
-                            <div class="bg-black/30 rounded-lg p-3 text-center">
-                                <div class="text-lg font-bold text-yellow-400">20+</div>
-                                <div class="text-gray-400">Dynasty Eras</div>
-                            </div>
-                            <div class="bg-black/30 rounded-lg p-3 text-center">
-                                <div class="text-lg font-bold text-yellow-400">100+</div>
-                                <div class="text-gray-400">Cultural Stories</div>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <button class="btn-secondary w-full py-2 rounded-full text-sm">Reserve Spot</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- World404 London -->
-                <div class="park-card london glass-card">
-                    <div class="park-image" style="background-image: url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
-                        <div class="park-badge" style="background: rgba(179, 71, 217, 0.2); color: var(--neon-purple);">
-                            Opening 2029
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3" style="color: var(--neon-purple);">World404 London</h3>
-                        <p class="text-gray-300 mb-4">
-                            History meets innovation in London's time-traveling adventure park. 
-                            From Victorian England to future Britain, experience the evolution of a civilization.
-                        </p>
-                        <div class="grid grid-cols-2 gap-4 text-sm">
-                            <div class="bg-black/30 rounded-lg p-3 text-center">
-                                <div class="text-lg font-bold text-purple-400">15</div>
-                                <div class="text-gray-400">Time Periods</div>
-                            </div>
-                            <div class="bg-black/30 rounded-lg p-3 text-center">
-                                <div class="text-lg font-bold text-purple-400">30+</div>
-                                <div class="text-gray-400">Historical Events</div>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <button class="btn-secondary w-full py-2 rounded-full text-sm">Stay Updated</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Mobile Pop-up Parks -->
-                <div class="park-card mobile glass-card">
-                    <div class="park-image" style="background-image: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
-                        <div class="park-badge" style="background: rgba(57, 255, 20, 0.2); color: var(--neon-green);">
-                            Active Now
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold mb-3" style="color: var(--neon-green);">Mobile Pop-up Parks</h3>
-                        <p class="text-gray-300 mb-4">
-                            Temporary installations for festivals, events, and special occasions. 
-                            Bringing World404 experiences to cities worldwide before permanent parks arrive.
-                        </p>
-                        <div class="grid grid-cols-2 gap-4 text-sm">
-                            <div class="bg-black/30 rounded-lg p-3 text-center">
-                                <div class="text-lg font-bold text-green-400">50+</div>
-                                <div class="text-gray-400">Cities Visited</div>
-                            </div>
-                            <div class="bg-black/30 rounded-lg p-3 text-center">
-                                <div class="text-lg font-bold text-green-400">200+</div>
-                                <div class="text-gray-400">Events Annually</div>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <button class="btn-secondary w-full py-2 rounded-full text-sm">Find Events</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Park Edition Exclusive Features -->
-    <section class="py-20" id="features">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl lg:text-5xl font-bold mb-6">
-                    Park Edition <span class="gradient-text">Exclusive Features</span>
-                </h2>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                    404GLASS Park Edition comes with specialized features designed exclusively 
-                    for the ultimate theme park experience.
-                </p>
-            </div>
-            
-            <div class="park-features">
-                <!-- Seamless Entry -->
-                <div class="feature-card glass-card">
-                    <div class="feature-icon" style="background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));">
-                        <i class="fas fa-ticket-alt"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3 gradient-text">Seamless Park Entry</h3>
-                    <p class="text-gray-300 text-sm mb-4">
-                        Walk straight into any World404 park with automatic ticket validation, 
-                        contactless payments, and instant access to all attractions.
+                <div class="w-full md:w-1/2 order-1 md:order-2">
+                    <h2 class="text-cyan-400 font-cyber text-sm tracking-[0.5em] mb-4" data-i18n="glass_subtitle">THE KEY TO THE KINGDOM</h2>
+                    <h3 class="text-4xl lg:text-5xl font-bold mb-8 text-white" data-i18n="glass_title">Don't Just Watch.<br>Process It.</h3>
+                    <p class="text-gray-400 mb-8 leading-relaxed" data-i18n="glass_desc">
+                        404WORLD is invisible to the naked eye. The entire park infrastructure is built digitally. 
+                        AIF.GLASS renders the environment in real-time, overlaying interactive quests, 
+                        pathfinding, and creature data directly onto your retina.
                     </p>
-                    <div class="space-y-2 text-xs text-gray-400">
-                        <div>• Facial recognition entry</div>
-                        <div>• Digital wallet integration</div>
-                        <div>• VIP lane access</div>
-                    </div>
-                </div>
-                
-                <!-- Real-time Queue Management -->
-                <div class="feature-card glass-card">
-                    <div class="feature-icon" style="background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3 gradient-text">Smart Queue System</h3>
-                    <p class="text-gray-300 text-sm mb-4">
-                        AR visualization of wait times, virtual queuing, and intelligent scheduling 
-                        to minimize waiting and maximize fun.
-                    </p>
-                    <div class="space-y-2 text-xs text-gray-400">
-                        <div>• Real-time wait predictions</div>
-                        <div>• Virtual line holding</div>
-                        <div>• Smart scheduling AI</div>
-                    </div>
-                </div>
-                
-                <!-- AR Navigation -->
-                <div class="feature-card glass-card">
-                    <div class="feature-icon" style="background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));">
-                        <i class="fas fa-compass"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3 gradient-text">3D AR Navigation</h3>
-                    <p class="text-gray-300 text-sm mb-4">
-                        Never get lost with 3D holographic pathfinding, hidden attraction discovery, 
-                        and personalized route optimization.
-                    </p>
-                    <div class="space-y-2 text-xs text-gray-400">
-                        <div>• 3D holographic directions</div>
-                        <div>• Hidden content discovery</div>
-                        <div>• Accessibility routing</div>
-                    </div>
-                </div>
-                
-                <!-- Social Features -->
-                <div class="feature-card glass-card">
-                    <div class="feature-icon" style="background: linear-gradient(135deg, var(--neon-orange), var(--neon-gold));">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3 gradient-text">Social Connection Hub</h3>
-                    <p class="text-gray-300 text-sm mb-4">
-                        Find friends and family instantly, coordinate group activities, 
-                        and share experiences in real-time with AR social features.
-                    </p>
-                    <div class="space-y-2 text-xs text-gray-400">
-                        <div>• Real-time friend tracking</div>
-                        <div>• Group activity coordination</div>
-                        <div>• Shared AR experiences</div>
-                    </div>
-                </div>
-                
-                <!-- Digital Collectibles -->
-                <div class="feature-card glass-card">
-                    <div class="feature-icon" style="background: linear-gradient(135deg, var(--neon-gold), var(--neon-green));">
-                        <i class="fas fa-gem"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3 gradient-text">Digital Memorabilia</h3>
-                    <p class="text-gray-300 text-sm mb-4">
-                        Collect exclusive NFT experiences, AR photo memories, and digital souvenirs 
-                        that preserve your unique park adventures forever.
-                    </p>
-                    <div class="space-y-2 text-xs text-gray-400">
-                        <div>• Exclusive NFT collectibles</div>
-                        <div>• AR photo moments</div>
-                        <div>• Achievement badges</div>
-                    </div>
-                </div>
-                
-                <!-- Real-time Experiences -->
-                <div class="feature-card glass-card">
-                    <div class="feature-icon" style="background: linear-gradient(135deg, var(--neon-pink), var(--neon-blue));">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3 gradient-text">Live Event Integration</h3>
-                    <p class="text-gray-300 text-sm mb-4">
-                        Participate in real-time park-wide events, seasonal celebrations, 
-                        and exclusive shows that adapt to the crowd's energy and participation.
-                    </p>
-                    <div class="space-y-2 text-xs text-gray-400">
-                        <div>• Real-time event participation</div>
-                        <div>• Crowd-reactive experiences</div>
-                        <div>• Seasonal special content</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Pricing and Tickets -->
-    <section class="py-20 bg-gradient-to-r from-purple-900/10 to-orange-900/10" id="tickets">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl lg:text-5xl font-bold mb-6">
-                    Park <span class="gradient-text">Tickets & Passes</span>
-                </h2>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                    Choose your level of access to the World404 theme park network. 
-                    From single-day experiences to global annual passes.
-                </p>
-            </div>
-            
-            <div class="tickets-grid">
-                <!-- Single Day Pass -->
-                <div class="glass-card p-8 text-center">
-                    <div class="text-4xl mb-4">🎢</div>
-                    <h3 class="text-2xl font-bold mb-4" style="color: var(--neon-blue);">Single Day Pass</h3>
-                    <div class="text-4xl font-bold mb-4" style="color: var(--neon-blue);">$99</div>
-                    <p class="text-gray-300 mb-6">Perfect for first-time visitors or special occasions</p>
-                    <ul class="space-y-3 text-sm text-gray-300 mb-8">
-                        <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-3"></i>Access to one park</li>
-                        <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-3"></i>Basic AR experiences</li>
-                        <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-3"></i>Standard queue access</li>
-                        <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-3"></i>Digital photo package</li>
+                    <ul class="space-y-6 mb-10">
+                        <li class="flex items-start gap-4 group">
+                            <div class="w-12 h-12 bg-gray-900 border border-gray-700 flex items-center justify-center shrink-0 text-cyan-400 group-hover:border-cyan-400 group-hover:shadow-[0_0_15px_rgba(0,243,255,0.3)] transition"><i class="fas fa-layer-group"></i></div>
+                            <div>
+                                <h4 class="text-white font-bold mb-1 group-hover:text-cyan-400 transition" data-i18n="glass_feat1_title">Multi-Layer Reality</h4>
+                                <p class="text-sm text-gray-500" data-i18n="glass_feat1_desc">Toggle between Fantasy, Horror, or Sci-Fi skins for the same physical ride.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 group">
+                            <div class="w-12 h-12 bg-gray-900 border border-gray-700 flex items-center justify-center shrink-0 text-purple-400 group-hover:border-purple-400 group-hover:shadow-[0_0_15px_rgba(188,19,254,0.3)] transition"><i class="fas fa-network-wired"></i></div>
+                            <div>
+                                <h4 class="text-white font-bold mb-1 group-hover:text-purple-400 transition" data-i18n="glass_feat2_title">Neural Link</h4>
+                                <p class="text-sm text-gray-500" data-i18n="glass_feat2_desc">The park adapts to your heart rate and pupil dilation in real-time.</p>
+                            </div>
+                        </li>
                     </ul>
-                    <button class="btn-primary w-full py-3 rounded-full font-medium">Buy Day Pass</button>
-                </div>
-                
-                <!-- Annual Global Pass -->
-                <div class="glass-card p-8 text-center" style="border: 2px solid var(--neon-gold);">
-                    <div class="text-4xl mb-4">🌍</div>
-                    <h3 class="text-2xl font-bold mb-4" style="color: var(--neon-gold);">Annual Global Pass</h3>
-                    <div class="text-4xl font-bold mb-4" style="color: var(--neon-gold);">$299</div>
-                    <p class="text-gray-300 mb-6">Unlimited access to all World404 parks worldwide</p>
-                    <ul class="space-y-3 text-sm text-gray-300 mb-8">
-                        <li class="flex items-center"><i class="fas fa-check text-yellow-400 mr-3"></i>All parks worldwide</li>
-                        <li class="flex items-center"><i class="fas fa-check text-yellow-400 mr-3"></i>Unlimited visits</li>
-                        <li class="flex items-center"><i class="fas fa-check text-yellow-400 mr-3"></i>Exclusive VIP content</li>
-                        <li class="flex items-center"><i class="fas fa-check text-yellow-400 mr-3"></i>Priority queue access</li>
-                        <li class="flex items-center"><i class="fas fa-check text-yellow-400 mr-3"></i>Early access to new attractions</li>
-                    </ul>
-                    <button class="btn-primary w-full py-3 rounded-full font-medium">Get Annual Pass</button>
-                </div>
-                
-                <!-- VIP Platinum Experience -->
-                <div class="glass-card p-8 text-center">
-                    <div class="text-4xl mb-4">👑</div>
-                    <h3 class="text-2xl font-bold mb-4" style="color: var(--neon-purple);">VIP Platinum</h3>
-                    <div class="text-4xl font-bold mb-4" style="color: var(--neon-purple);">$999</div>
-                    <p class="text-gray-300 mb-6">Ultimate luxury experience with exclusive perks</p>
-                    <ul class="space-y-3 text-sm text-gray-300 mb-8">
-                        <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-3"></i>All Global Pass benefits</li>
-                        <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-3"></i>Private guided experiences</li>
-                        <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-3"></i>Creator collaboration access</li>
-                        <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-3"></i>Behind-scenes content</li>
-                        <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-3"></i>Concierge service</li>
-                    </ul>
-                    <button class="btn-primary w-full py-3 rounded-full font-medium">Join VIP</button>
-                </div>
-            </div>
-            
-            <div class="text-center mt-12">
-                <p class="text-lg text-gray-400 mb-6">Special Launch Offer: Get 404GLASS Park Edition + Annual Pass</p>
-                <div class="inline-flex items-center space-x-4 bg-black/30 rounded-full px-8 py-4">
-                    <span class="text-2xl line-through text-gray-500">$1,298</span>
-                    <span class="text-3xl font-bold gradient-text">$999</span>
-                    <span class="bg-red-500 text-white px-3 py-1 rounded-full text-sm">Save $299</span>
-                </div>
-                <div class="mt-6">
-                    <button class="btn-primary px-12 py-4 rounded-full text-xl font-bold">Pre-order Bundle</button>
+                    <button class="text-white border-b border-cyan-400 pb-1 hover:text-cyan-400 transition" data-i18n="btn_glass_specs">VIEW HARDWARE SPECS ></button>
                 </div>
             </div>
         </div>
     </section>
-    
-    <!-- Call to Action -->
-    <section class="py-20">
-        <div class="container mx-auto px-4">
-            <div class="text-center">
-                <h2 class="text-4xl lg:text-6xl font-bold mb-6">
-                    Welcome to the <span class="gradient-text">Future</span> of Fun
-                </h2>
-                <p class="text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto mb-12">
-                    Be among the first to experience theme parks that know you, adapt to you, 
-                    and create memories that are uniquely yours. The revolution starts with World404.
+
+    <!-- Detailed Experiences -->
+    <section id="experiences" class="py-24 relative overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20">
+                <h2 class="font-cyber text-4xl lg:text-6xl font-bold mb-4" data-i18n="exp_section_title">KINETIC <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">MODULES</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto" data-i18n="exp_section_desc">
+                    Physical infrastructure meets generative code.
                 </p>
-                
-                <div class="flex flex-col sm:flex-row gap-6 justify-center max-w-2xl mx-auto">
-                    <button class="btn-primary px-12 py-4 rounded-full text-xl font-bold flex-1 sm:flex-none">
-                        Reserve Your Spot
-                    </button>
-                    <button class="btn-secondary px-12 py-4 rounded-full text-xl font-bold flex-1 sm:flex-none">
-                        Virtual Preview
-                    </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Module 1 -->
+                <div class="hud-panel p-6 group hover:-translate-y-2 transition-transform duration-300">
+                    <div class="hud-corner h-full">
+                        <div class="h-48 overflow-hidden mb-6 relative border border-gray-700 bg-black">
+                            <!-- 更换为光轨过山车图片 -->
+                            <img src="https://images.unsplash.com/photo-1513883049090-d0b7439799bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-80 group-hover:opacity-100">
+                            <div class="absolute top-2 right-2 bg-black/80 text-cyan-400 text-xs px-2 py-1 font-mono">AR_RIDE_V4.0</div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2" data-i18n="mod1_title">Hyper-Coasters</h3>
+                        <p class="text-gray-400 text-sm mb-6 h-20" data-i18n="mod1_desc">
+                            Standard physics engines rewritten. While your body feels the G-force of a loop, your eyes see a warp drive jump through a collapsing star system.
+                        </p>
+                        <ul class="text-xs text-gray-500 space-y-2 mb-6 font-mono">
+                            <li class="flex justify-between"><span>SYNC RATE:</span> <span class="text-cyan-400">99.9%</span></li>
+                            <li class="flex justify-between"><span>FPS:</span> <span class="text-cyan-400">120</span></li>
+                            <li class="flex justify-between"><span>THEMES:</span> <span class="text-cyan-400">INFINITE</span></li>
+                        </ul>
+                        <button class="w-full btn-cyber py-3 text-xs font-bold" data-i18n="btn_details">ACCESS DATA</button>
+                    </div>
                 </div>
-                
-                <div class="mt-8 text-sm text-gray-400">
-                    <p>First park opens Tokyo 2027 • Global expansion 2028-2030 • 404GLASS Park Edition included</p>
+
+                <!-- Module 2 -->
+                <div class="hud-panel p-6 group hover:-translate-y-2 transition-transform duration-300">
+                    <div class="hud-corner h-full">
+                        <div class="h-48 overflow-hidden mb-6 relative border border-gray-700 bg-black">
+                            <!-- 更换为赛博朋克街景图片 -->
+                            <img src="https://images.unsplash.com/photo-1555680202-c86f0e12f086?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-80 group-hover:opacity-100">
+                            <div class="absolute top-2 right-2 bg-black/80 text-purple-400 text-xs px-2 py-1 font-mono">STORY_ENGINE</div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2" data-i18n="mod2_title">Narrative Zones</h3>
+                        <p class="text-gray-400 text-sm mb-6 h-20" data-i18n="mod2_desc">
+                            No two visits are alike. Our AI Dungeon Master generates NPCs, quests, and dialogue in real-time based on your profile and past interactions.
+                        </p>
+                        <ul class="text-xs text-gray-500 space-y-2 mb-6 font-mono">
+                            <li class="flex justify-between"><span>NPC COUNT:</span> <span class="text-purple-400">GENERATIVE</span></li>
+                            <li class="flex justify-between"><span>VOICE:</span> <span class="text-purple-400">NATURAL</span></li>
+                            <li class="flex justify-between"><span>MEMORY:</span> <span class="text-purple-400">PERSISTENT</span></li>
+                        </ul>
+                        <button class="w-full btn-cyber py-3 text-xs font-bold" style="border-color: var(--neon-purple); color: var(--neon-purple);" data-i18n="btn_details">ACCESS DATA</button>
+                    </div>
+                </div>
+
+                <!-- Module 3 -->
+                <div class="hud-panel p-6 group hover:-translate-y-2 transition-transform duration-300">
+                    <div class="hud-corner h-full">
+                        <div class="h-48 overflow-hidden mb-6 relative border border-gray-700 bg-black">
+                            <!-- 更换为电竞/多人互动图片 -->
+                            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-80 group-hover:opacity-100">
+                            <div class="absolute top-2 right-2 bg-black/80 text-pink-400 text-xs px-2 py-1 font-mono">MULTIPLAYER</div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2" data-i18n="mod3_title">Raid Battles</h3>
+                        <p class="text-gray-400 text-sm mb-6 h-20" data-i18n="mod3_desc">
+                            The park plaza is a boss arena. Team up with 50 other visitors to take down a Kaiju scaling the central tower. Physical movement required.
+                        </p>
+                        <ul class="text-xs text-gray-500 space-y-2 mb-6 font-mono">
+                            <li class="flex justify-between"><span>MAX PLAYERS:</span> <span class="text-pink-400">100</span></li>
+                            <li class="flex justify-between"><span>HAPTICS:</span> <span class="text-pink-400">ENABLED</span></li>
+                            <li class="flex justify-between"><span>LOOT:</span> <span class="text-pink-400">NFT/CRYPTO</span></li>
+                        </ul>
+                        <button class="w-full btn-cyber py-3 text-xs font-bold" style="border-color: var(--neon-pink); color: var(--neon-pink);" data-i18n="btn_details">ACCESS DATA</button>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-    
+
+    <!-- Global Network (详细版 & 可交互) -->
+    <section id="parks" class="py-24 bg-[#0a0a0f]">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-end mb-16 border-b border-gray-800 pb-6">
+                <div>
+                    <h2 class="font-cyber text-3xl lg:text-5xl font-bold mb-2 text-white" data-i18n="parks_title">SERVER <span class="text-gray-600">LOCATIONS</span></h2>
+                    <p class="text-cyan-400 font-mono text-sm" data-i18n="parks_subtitle">> SELECT DEPLOYMENT NODE FOR DETAILS</p>
+                </div>
+                <div class="hidden md:block text-right">
+                    <div class="text-xs text-gray-500">GLOBAL UPTIME</div>
+                    <div class="text-xl font-bold text-green-500">99.999%</div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Location 1: Tokyo -->
+                <div class="hud-panel p-6 flex flex-col md:flex-row gap-8 items-center group cursor-pointer hover:bg-white/5 transition" onclick="openParkModal('tokyo')">
+                    <div class="w-full md:w-1/3 h-48 relative overflow-hidden rounded border border-gray-700">
+                        <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-pink-500/20 mix-blend-overlay"></div>
+                        <div class="absolute bottom-0 left-0 bg-black/80 px-3 py-1 text-white font-cyber text-sm border-t border-r border-pink-500">TOKYO_NODE</div>
+                    </div>
+                    <div class="w-full md:w-2/3 flex flex-col justify-between h-full">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-2xl font-bold text-white mb-1">Neo-Akihabara</h3>
+                                <div class="text-xs text-pink-500 font-mono" data-i18n="park_jp_status">STATUS: CONSTRUCTION (OPENING 2027)</div>
+                            </div>
+                            <div class="text-right hidden sm:block">
+                                <div class="text-xs text-gray-500">LAT/LONG</div>
+                                <div class="font-mono text-xs text-gray-300">35.6762° N, 139.6503° E</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-6 leading-relaxed max-w-2xl" data-i18n="park_jp_desc">
+                            The flagship node. A complete reconstruction of anime aesthetics overlaid on Shinjuku's density. 
+                            Features 50+ distinct IP zones, Mecha-suit rentals, and a fully holographic Idol concert arena.
+                        </p>
+                        <div class="flex gap-4">
+                            <span class="px-2 py-1 bg-gray-800 text-[10px] text-gray-400 border border-gray-700 rounded">CLICK FOR INTEL</span>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex items-center justify-center w-16 h-16 border border-gray-700 rounded-full group-hover:border-pink-500 group-hover:text-pink-500 transition">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <!-- Location 2: Orlando -->
+                <div class="hud-panel p-6 flex flex-col md:flex-row gap-8 items-center group cursor-pointer hover:bg-white/5 transition" onclick="openParkModal('orlando')">
+                    <div class="w-full md:w-1/3 h-48 relative overflow-hidden rounded border border-gray-700">
+                        <img src="https://images.unsplash.com/photo-1597466599360-3b9775841aec?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-blue-500/20 mix-blend-overlay"></div>
+                        <div class="absolute bottom-0 left-0 bg-black/80 px-3 py-1 text-white font-cyber text-sm border-t border-r border-blue-500">ORLANDO_NEXUS</div>
+                    </div>
+                    <div class="w-full md:w-2/3 flex flex-col justify-between h-full">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-2xl font-bold text-white mb-1">Sector 404</h3>
+                                <div class="text-xs text-blue-500 font-mono" data-i18n="park_us_status">STATUS: PLANNING (OPENING 2028)</div>
+                            </div>
+                            <div class="text-right hidden sm:block">
+                                <div class="text-xs text-gray-500">LAT/LONG</div>
+                                <div class="font-mono text-xs text-gray-300">28.5383° N, 81.3792° W</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-6 leading-relaxed max-w-2xl" data-i18n="park_us_desc">
+                            Replacing magic with code. The world's largest AR deployment. 
+                            Features an 800-acre "Blank Canvas" zone where the environment changes theme every hour based on global voting.
+                        </p>
+                        <div class="flex gap-4">
+                             <span class="px-2 py-1 bg-gray-800 text-[10px] text-gray-400 border border-gray-700 rounded">CLICK FOR INTEL</span>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex items-center justify-center w-16 h-16 border border-gray-700 rounded-full group-hover:border-blue-500 group-hover:text-blue-500 transition">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <!-- Location 3: Shanghai -->
+                <div class="hud-panel p-6 flex flex-col md:flex-row gap-8 items-center group cursor-pointer hover:bg-white/5 transition" onclick="openParkModal('shanghai')">
+                    <div class="w-full md:w-1/3 h-48 relative overflow-hidden rounded border border-gray-700">
+                        <img src="https://images.unsplash.com/photo-1548013146-72479768bada?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-yellow-500/20 mix-blend-overlay"></div>
+                        <div class="absolute bottom-0 left-0 bg-black/80 px-3 py-1 text-white font-cyber text-sm border-t border-r border-yellow-500">SHANGHAI_LINK</div>
+                    </div>
+                    <div class="w-full md:w-2/3 flex flex-col justify-between h-full">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-2xl font-bold text-white mb-1">Dynasty OS</h3>
+                                <div class="text-xs text-yellow-500 font-mono" data-i18n="park_cn_status">STATUS: PLANNING (OPENING 2028)</div>
+                            </div>
+                            <div class="text-right hidden sm:block">
+                                <div class="text-xs text-gray-500">LAT/LONG</div>
+                                <div class="font-mono text-xs text-gray-300">31.2304° N, 121.4737° E</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-6 leading-relaxed max-w-2xl" data-i18n="park_cn_desc">
+                            5,000 years of history recompiled into a high-fidelity simulation. 
+                            Walk through the Tang Dynasty recreated with nanometer precision, battling mythological beasts in the Forbidden City.
+                        </p>
+                        <div class="flex gap-4">
+                             <span class="px-2 py-1 bg-gray-800 text-[10px] text-gray-400 border border-gray-700 rounded">CLICK FOR INTEL</span>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex items-center justify-center w-16 h-16 border border-gray-700 rounded-full group-hover:border-yellow-500 group-hover:text-yellow-500 transition">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tickets / Access (详细版) -->
+    <section id="tickets" class="py-24 relative overflow-hidden">
+        <!-- 背景矩阵雨效果模拟 -->
+        <div class="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')] bg-cover opacity-5"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-20">
+                <h2 class="font-cyber text-4xl lg:text-6xl font-bold mb-4" data-i18n="ticket_title">ENTRY <span class="text-cyan-400">PROTOCOLS</span></h2>
+                <p class="text-gray-400" data-i18n="ticket_desc">Select your clearance level.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-center">
+                
+                <!-- Standard Pass -->
+                <div class="hud-panel p-8 flex flex-col relative h-[500px]">
+                    <div class="text-center mb-6">
+                        <div class="font-cyber text-xl text-gray-400" data-i18n="pass1_name">VISITOR</div>
+                        <div class="text-4xl font-bold text-white mt-2">$99<span class="text-sm text-gray-500">/day</span></div>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-sm text-gray-400 flex-grow font-mono">
+                        <li class="flex items-center"><i class="fas fa-check text-cyan-500 mr-3"></i> <span data-i18n="pass1_feat1">Single Park Access</span></li>
+                        <li class="flex items-center"><i class="fas fa-check text-cyan-500 mr-3"></i> <span data-i18n="pass1_feat2">Standard AR Gear</span></li>
+                        <li class="flex items-center"><i class="fas fa-check text-cyan-500 mr-3"></i> <span data-i18n="pass1_feat3">Public Zone Access</span></li>
+                        <li class="flex items-center opacity-50"><i class="fas fa-times text-gray-600 mr-3"></i> Neural Link</li>
+                        <li class="flex items-center opacity-50"><i class="fas fa-times text-gray-600 mr-3"></i> Fast Track</li>
+                    </ul>
+                    <button class="btn-cyber w-full py-3 font-bold" data-i18n="btn_buy">PURCHASE KEY</button>
+                </div>
+
+                <!-- Annual Pass (高亮) -->
+                <div class="hud-panel p-8 flex flex-col relative h-[550px] border-cyan-400 shadow-[0_0_40px_rgba(0,243,255,0.15)] z-10 transform md:-translate-y-4 bg-black/90">
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-cyan-400 text-black text-xs font-bold px-4 py-1 tracking-widest">RECOMMENDED</div>
+                    <div class="text-center mb-6">
+                        <div class="font-cyber text-2xl text-cyan-400" data-i18n="pass2_name">RESIDENT</div>
+                        <div class="text-5xl font-bold text-white mt-2">$299<span class="text-sm text-gray-500">/year</span></div>
+                    </div>
+                    <ul class="space-y-5 mb-8 text-sm text-gray-300 flex-grow font-mono">
+                        <li class="flex items-center"><i class="fas fa-check text-cyan-400 mr-3"></i> <span data-i18n="pass2_feat1">Global Network Access</span></li>
+                        <li class="flex items-center"><i class="fas fa-check text-cyan-400 mr-3"></i> <span data-i18n="pass2_feat2">AIF.GLASS Lite Included</span></li>
+                        <li class="flex items-center"><i class="fas fa-check text-cyan-400 mr-3"></i> <span data-i18n="pass2_feat3">Unlimited Login</span></li>
+                        <li class="flex items-center"><i class="fas fa-check text-cyan-400 mr-3"></i> <span data-i18n="pass2_feat4">Priority Queue (Level 1)</span></li>
+                        <li class="flex items-center"><i class="fas fa-check text-cyan-400 mr-3"></i> <span data-i18n="pass2_feat5">Character Customization</span></li>
+                    </ul>
+                    <button class="btn-cyber w-full py-4 font-bold bg-cyan-400/10" data-i18n="btn_upgrade">UPGRADE STATUS</button>
+                </div>
+
+                <!-- VIP Pass -->
+                <div class="hud-panel p-8 flex flex-col relative h-[500px] border-purple-500/50">
+                    <div class="text-center mb-6">
+                        <div class="font-cyber text-xl text-purple-400" data-i18n="pass3_name">DEVELOPER</div>
+                        <div class="text-4xl font-bold text-white mt-2">$999<span class="text-sm text-gray-500">/year</span></div>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-sm text-gray-400 flex-grow font-mono">
+                        <li class="flex items-center"><i class="fas fa-check text-purple-500 mr-3"></i> <span data-i18n="pass3_feat1">All Resident Perks</span></li>
+                        <li class="flex items-center"><i class="fas fa-check text-purple-500 mr-3"></i> <span data-i18n="pass3_feat2">AIF.GLASS PRO Included</span></li>
+                        <li class="flex items-center"><i class="fas fa-check text-purple-500 mr-3"></i> <span data-i18n="pass3_feat3">Backstage / Debug Mode</span></li>
+                        <li class="flex items-center"><i class="fas fa-check text-purple-500 mr-3"></i> <span data-i18n="pass3_feat4">Private Concierge AI</span></li>
+                        <li class="flex items-center"><i class="fas fa-check text-purple-500 mr-3"></i> <span data-i18n="pass3_feat5">Create Your Own NPCs</span></li>
+                    </ul>
+                    <button class="btn-cyber btn-vip w-full py-3 font-bold" data-i18n="btn_unlock">GRANT ROOT ACCESS</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="py-16 bg-black">
-        <div class="container mx-auto px-4">
-            <div class="footer-grid">
-                <div>
-                    <div class="logo-font text-3xl mb-6">404GLASS</div>
-                    <p class="text-gray-400 mb-6 max-w-md text-lg">
-                        Redefining theme park experiences through AI-native technology and infinite personalization. 
-                        Welcome to World404 - where every visit is a new adventure.
+    <footer class="bg-black border-t border-gray-900 pt-20 pb-10">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-1">
+                    <span class="font-cyber text-2xl font-bold text-white block mb-6">404<span class="text-cyan-400">WORLD</span></span>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6" data-i18n="footer_about">
+                        The physical world is just a canvas. We provide the paint. 
+                        Redefining entertainment through high-fidelity augmented reality and generative AI.
                     </p>
-                    <div class="flex space-x-6">
-                        <a href="#" class="text-gray-400 hover:text-accent transition text-2xl">
-                            <i class="fab fa-youtube"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-accent transition text-2xl">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-accent transition text-2xl">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-accent transition text-2xl">
-                            <i class="fab fa-discord"></i>
-                        </a>
+                    <div class="flex gap-4 text-gray-400">
+                        <a href="#" class="hover:text-cyan-400 transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-cyan-400 transition"><i class="fab fa-discord"></i></a>
+                        <a href="#" class="hover:text-cyan-400 transition"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
                 
                 <div>
-                    <h3 class="font-bold text-xl mb-6 gradient-text">Theme Parks</h3>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">World404 Tokyo</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">World404 Orlando</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">World404 Shanghai</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">World404 London</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Mobile Pop-ups</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Park Locations</a></li>
+                    <h4 class="font-cyber text-white mb-6" data-i18n="footer_system">SYSTEM</h4>
+                    <ul class="space-y-3 text-sm text-gray-500 font-mono">
+                        <li><a href="#" class="hover:text-cyan-400 transition">Status Page</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition">Patch Notes</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition">AIF.GLASS Drivers</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition">Developer API</a></li>
                     </ul>
                 </div>
-                
+
                 <div>
-                    <h3 class="font-bold text-xl mb-6 gradient-text">Experiences</h3>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">AR Enhanced Rides</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Interactive Stories</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Multiplayer Adventures</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Time Travel Zones</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">AI Personal Guide</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">VIP Experiences</a></li>
+                    <h4 class="font-cyber text-white mb-6" data-i18n="footer_legal">LEGAL</h4>
+                    <ul class="space-y-3 text-sm text-gray-500 font-mono">
+                        <li><a href="#" class="hover:text-cyan-400 transition">Privacy Protocol</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition">Terms of Simulation</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition">Safety Guidelines</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition">Biometric Data</a></li>
                     </ul>
                 </div>
-                
+
                 <div>
-                    <h3 class="font-bold text-xl mb-6 gradient-text">Tickets & Passes</h3>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Single Day Pass</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Annual Global Pass</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">VIP Platinum</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Group Packages</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Corporate Events</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h3 class="font-bold text-xl mb-6 gradient-text">404GLASS</h3>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Park Edition</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Hardware Specs</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Pre-order Now</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Setup Guide</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Support</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h3 class="font-bold text-xl mb-6 gradient-text">Support</h3>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Help Center</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Park Guidelines</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Safety Information</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Accessibility</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Contact Us</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- Newsletter Signup -->
-            <div class="mt-12 pt-8 border-t border-gray-800">
-                <div class="glass-card p-8 text-center">
-                    <h3 class="text-2xl font-bold mb-4 gradient-text">Stay Updated on World404</h3>
-                    <p class="text-gray-300 mb-6">Get exclusive updates on park openings, new attractions, and early access opportunities.</p>
-                    <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                        <input type="email" placeholder="Enter your email" class="flex-1 px-4 py-3 bg-black/50 border border-gray-600 rounded-full text-white placeholder-gray-400 focus:outline-none focus:border-accent">
-                        <button class="btn-primary px-8 py-3 rounded-full font-medium">Subscribe</button>
+                    <h4 class="font-cyber text-white mb-6" data-i18n="footer_connect">NEWSLETTER</h4>
+                    <p class="text-gray-600 text-xs mb-4">Subscribe for beta access keys.</p>
+                    <div class="flex border border-gray-700 p-1">
+                        <input type="email" placeholder="EMAIL_ADDRESS" class="bg-transparent text-white px-2 py-1 w-full text-sm outline-none font-mono">
+                        <button class="bg-gray-800 text-cyan-400 px-3 py-1 hover:bg-cyan-400 hover:text-black transition"><i class="fas fa-arrow-right"></i></button>
                     </div>
                 </div>
             </div>
             
-            <div class="footer-bottom">
-                <p class="text-gray-500 text-sm">
-                    © 2025 World404 Theme Parks. All rights reserved. Powered by 404GLASS technology.
-                </p>
-                <div class="footer-links">
-                    <a href="#" class="text-gray-500 hover:text-white text-sm transition">Privacy</a>
-                    <a href="#" class="text-gray-500 hover:text-white text-sm transition">Terms</a>
-                    <a href="#" class="text-gray-500 hover:text-white text-sm transition">Safety</a>
-                    <a href="#" class="text-gray-500 hover:text-white text-sm transition">Careers</a>
-                </div>
+            <div class="border-t border-gray-900 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-600 font-mono">
+                <p>© 2025 404WORLD Inc. // SYSTEM ONLINE</p>
+                <p>LATENCY: 12ms // SERVER: TOKYO_01</p>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts -->
+    <!-- Park Details Modal -->
+    <div id="parkModal" class="park-modal">
+        <div class="modal-content relative">
+            <button onclick="closeParkModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white z-10 text-xl">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="modalBody" class="p-8 md:p-12">
+                <!-- Content injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Logic -->
     <script>
-        // Mobile menu functionality
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const mobileMenuClose = document.getElementById('mobileMenuClose');
-        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const i18n = {
+            en: {
+                // ... (Previous translations kept same)
+                nav_glass: "AIF.GLASS",
+                nav_experiences: "MODULES",
+                nav_parks: "LOCATIONS",
+                nav_tickets: "ACCESS",
+                btn_connect: "SYSTEM LOGIN",
+                hero_status: "LIVE: TOKYO NODE CONSTRUCTING",
+                hero_title: "REALITY PATCHED",
+                hero_desc: "Welcome to 404WORLD. Not a theme park, but a digital operating system overlaid on the physical world. Requires AIF.GLASS hardware to render. Without it, you see nothing. With it, you see everything.",
+                btn_download_os: "DOWNLOAD OS",
+                btn_watch_demo: "WATCH DEMO",
+                glass_subtitle: "THE KEY TO THE KINGDOM",
+                glass_title: "Don't Just Watch.<br>Process It.",
+                glass_desc: "404WORLD is invisible to the naked eye. The entire park infrastructure is built digitally. AIF.GLASS renders the environment in real-time, overlaying interactive quests, pathfinding, and creature data directly onto your retina.",
+                glass_feat1_title: "Multi-Layer Reality",
+                glass_feat1_desc: "Toggle between Fantasy, Horror, or Sci-Fi skins for the same physical ride.",
+                glass_feat2_title: "Neural Link",
+                glass_feat2_desc: "The park adapts to your heart rate and pupil dilation in real-time.",
+                btn_glass_specs: "VIEW HARDWARE SPECS >",
+                exp_section_title: "KINETIC MODULES",
+                exp_section_desc: "Physical infrastructure meets generative code.",
+                mod1_title: "Hyper-Coasters",
+                mod1_desc: "Standard physics engines rewritten. While your body feels the G-force of a loop, your eyes see a warp drive jump through a collapsing star system.",
+                btn_details: "ACCESS DATA",
+                mod2_title: "Narrative Zones",
+                mod2_desc: "No two visits are alike. Our AI Dungeon Master generates NPCs, quests, and dialogue in real-time based on your profile and past interactions.",
+                mod3_title: "Raid Battles",
+                mod3_desc: "The park plaza is a boss arena. Team up with 50 other visitors to take down a Kaiju scaling the central tower. Physical movement required.",
+                parks_title: "SERVER LOCATIONS",
+                parks_subtitle: "> SELECT DEPLOYMENT NODE FOR DETAILS",
+                park_jp_status: "STATUS: CONSTRUCTION (OPENING 2027)",
+                park_jp_desc: "The flagship node. A complete reconstruction of anime aesthetics overlaid on Shinjuku's density. Features 50+ distinct IP zones, Mecha-suit rentals, and a fully holographic Idol concert arena.",
+                park_us_status: "STATUS: PLANNING (OPENING 2028)",
+                park_us_desc: "Replacing magic with code. The world's largest AR deployment. Features an 800-acre 'Blank Canvas' zone where the environment changes theme every hour based on global voting.",
+                park_cn_status: "STATUS: PLANNING (OPENING 2028)",
+                park_cn_desc: "5,000 years of history recompiled into a high-fidelity simulation. Walk through the Tang Dynasty recreated with nanometer precision, battling mythological beasts in the Forbidden City.",
+                ticket_title: "ENTRY PROTOCOLS",
+                ticket_desc: "Select your clearance level.",
+                pass1_name: "VISITOR",
+                pass1_feat1: "Single Park Access",
+                pass1_feat2: "Standard AR Gear",
+                pass1_feat3: "Public Zone Access",
+                btn_buy: "PURCHASE KEY",
+                pass2_name: "RESIDENT",
+                pass2_feat1: "Global Network Access",
+                pass2_feat2: "AIF.GLASS Lite Included",
+                pass2_feat3: "Unlimited Login",
+                pass2_feat4: "Priority Queue (Level 1)",
+                pass2_feat5: "Character Customization",
+                btn_upgrade: "UPGRADE STATUS",
+                pass3_name: "DEVELOPER",
+                pass3_feat1: "All Resident Perks",
+                pass3_feat2: "AIF.GLASS PRO Included",
+                pass3_feat3: "Backstage / Debug Mode",
+                pass3_feat4: "Private Concierge AI",
+                pass3_feat5: "Create Your Own NPCs",
+                btn_unlock: "GRANT ROOT ACCESS",
+                footer_about: "The physical world is just a canvas. We provide the paint. Redefining entertainment through high-fidelity augmented reality and generative AI.",
+                footer_system: "SYSTEM",
+                footer_legal: "LEGAL",
+                footer_connect: "NEWSLETTER"
+            },
+            tc: {
+                nav_glass: "AIF.GLASS",
+                nav_experiences: "體驗模組",
+                nav_parks: "全球節點",
+                nav_tickets: "通行權限",
+                btn_connect: "系統登錄",
+                hero_status: "實況：東京節點建設中",
+                hero_title: "現實重構",
+                hero_desc: "歡迎來到 404WORLD。這不是傳統主題樂園，而是覆蓋在物理世界上的數字操作系統。必須配戴 AIF.GLASS 硬件才能渲染。沒有它，你什麼都看不見。有了它，你看見一切。",
+                btn_download_os: "下載操作系統",
+                btn_watch_demo: "觀看演示",
+                glass_subtitle: "通往王國的鑰匙",
+                glass_title: "別只是觀看。<br>去運算它。",
+                glass_desc: "肉眼無法看見 404WORLD。整個樂園的基礎設施都是數字化構建的。AIF.GLASS 實時渲染環境，將互動任務、路徑導航和生物數據直接疊加在你的視網膜上。",
+                glass_feat1_title: "多層現實",
+                glass_feat1_desc: "在同一物理設施上切換奇幻、恐怖或科幻皮膚。",
+                glass_feat2_title: "神經連結",
+                glass_feat2_desc: "樂園會根據你的心率和瞳孔擴張實時調整體驗強度。",
+                btn_glass_specs: "查看硬件規格 >",
+                exp_section_title: "動能模組",
+                exp_section_desc: "物理基礎設施遇見生成式代碼。",
+                mod1_title: "超空間過山車",
+                mod1_desc: "重寫標準物理引擎。當你的身體感受到翻滾的重力時，你的眼睛看到的是穿越坍塌星系的曲速跳躍。",
+                btn_details: "讀取數據",
+                mod2_title: "敘事區域",
+                mod2_desc: "沒有兩次訪問是相同的。我們的 AI 地下城主會根據你的檔案和過去的互動，實時生成 NPC、任務和對話。",
+                mod3_title: "團隊副本",
+                mod3_desc: "樂園廣場就是一個 BOSS 競技場。與 50 名其他遊客組隊，擊敗攀爬中央塔樓的怪獸。需要真實的身體移動。",
+                parks_title: "服務器位置",
+                parks_subtitle: "> 點擊節點查看詳情",
+                park_jp_status: "狀態：建設中 (2027年開幕)",
+                park_jp_desc: "旗艦節點。在新宿的高密度環境上完全重構動漫美學。擁有 50+ 獨特的 IP 區域、機甲租賃和全息偶像演唱會競技場。",
+                park_us_status: "狀態：規劃中 (2028年開幕)",
+                park_us_desc: "用代碼取代魔法。世界上最大的 AR 部署。擁有一個 800 英畝的「空白畫布」區域，環境主題每小時根據全球投票變化。",
+                park_cn_status: "狀態：規劃中 (2028年開幕)",
+                park_cn_desc: "將 5000 年的歷史重新編譯為高保真模擬。漫步於納米級精度重建的唐朝，在故宮中與神話野獸戰鬥。",
+                ticket_title: "進入協議",
+                ticket_desc: "選擇你的權限等級。",
+                pass1_name: "訪客",
+                pass1_feat1: "單一樂園訪問",
+                pass1_feat2: "標準 AR 裝備",
+                pass1_feat3: "公共區域訪問",
+                btn_buy: "購買密鑰",
+                pass2_name: "居民",
+                pass2_feat1: "全球網絡訪問",
+                pass2_feat2: "包含 AIF.GLASS Lite",
+                pass2_feat3: "無限次登錄",
+                pass2_feat4: "優先排隊 (等級 1)",
+                pass2_feat5: "角色自定義",
+                btn_upgrade: "升級狀態",
+                pass3_name: "開發者",
+                pass3_feat1: "所有居民福利",
+                pass3_feat2: "包含 AIF.GLASS PRO",
+                pass3_feat3: "後台 / 調試模式",
+                pass3_feat4: "私人 AI 禮賓",
+                pass3_feat5: "創建你自己的 NPC",
+                btn_unlock: "獲取 Root 權限",
+                footer_about: "物理世界只是一塊畫布。我們提供顏料。通過高保真增強現實和生成式 AI 重新定義娛樂。",
+                footer_system: "系統",
+                footer_legal: "法律",
+                footer_connect: "通訊"
+            }
+        };
+
+        const parkDetails = {
+            tokyo: {
+                title: "NEO-AKIHABARA (TOKYO NODE)",
+                subtitle: "The Flagship Integration",
+                image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+                desc: "Located in the heart of the reclaimed Tokyo Bay district, Neo-Akihabara is the first full-scale implementation of the 404WORLD OS. It serves as the primary testing ground for high-density urban AR integration.",
+                specs: [
+                    { label: "AREA", value: "120 Hectares" },
+                    { label: "IP ZONES", value: "50+ (Anime/Gaming)" },
+                    { label: "NETWORK", value: "6G Dedicated Mesh" }
+                ],
+                features: [
+                    "<strong>Mecha Hangar:</strong> Rent and pilot 1:1 scale functional exoskeletons with AR HUD overlays for urban combat simulation.",
+                    "<strong>Virtual Idol Arena:</strong> A 50,000 capacity stadium hosting daily concerts by AI-generated idols, with real-time crowd interaction.",
+                    "<strong>Ghost in the Shell Zone:</strong> A stealth-action district where visitors must hack physical terminals to progress through the story."
+                ]
+            },
+            orlando: {
+                title: "SECTOR 404 (ORLANDO NEXUS)",
+                subtitle: "The Infinite Canvas",
+                image: "https://images.unsplash.com/photo-1518544806352-a2261508db23?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+                desc: "Replacing the swampy magic of old with pure code. Sector 404 is designed as a 'White Box' environment. The physical structures are minimalist white geometry, fully textured and themed by AIF.GLASS in real-time.",
+                specs: [
+                    { label: "AREA", value: "800 Acres" },
+                    { label: "UPDATE CYCLE", value: "Hourly" },
+                    { label: "USER CONTROL", value: "DAO Voted Themes" }
+                ],
+                features: [
+                    "<strong>The Blank Canvas:</strong> The central hub changes its entire architectural style every hour based on global user voting via the app.",
+                    "<strong>Hyper-Loop Racing:</strong> Physical racing karts on a magnetic track, where the track layout appears to change procedurally via AR.",
+                    "<strong>Creature Lab:</strong> Visitors design bio-digital pets at home and release them into the park's ecosystem to interact with others."
+                ]
+            },
+            shanghai: {
+                title: "DYNASTY OS (SHANGHAI LINK)",
+                subtitle: "History Recompiled",
+                image: "https://images.unsplash.com/photo-1474181487882-5abf3f0ba6c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+                desc: "A temporal simulation engine. Dynasty OS reconstructs the Tang Dynasty with molecular precision. It is an educational tool as much as a game, allowing direct interaction with historical figures powered by LLMs.",
+                specs: [
+                    { label: "ERA", value: "618–907 AD" },
+                    { label: "NPC COUNT", value: "5,000+ Active Agents" },
+                    { label: "FIDELITY", value: "8K Textures" }
+                ],
+                features: [
+                    "<strong>The Forbidden Duel:</strong> Learn martial arts from AI grandmasters. Your physical movements trigger elemental attacks in the AR layer.",
+                    "<strong>Mythology Raid:</strong> At night, the historical simulation glitches, and beasts from the Classic of Mountains and Seas invade the city.",
+                    "<strong>Imperial Archives:</strong> A puzzle-solving zone located in a massive digital library containing the sum of human knowledge."
+                ]
+            }
+        };
+
+        let currentLang = 'en';
+
+        function setLang(lang) {
+            currentLang = lang;
+            
+            // 更新按鈕樣式
+            if(lang === 'en') {
+                document.getElementById('langEnDesk').className = "px-3 py-1 text-xs font-bold bg-cyan-900/50 text-cyan-400 hover:bg-cyan-400 hover:text-black transition";
+                document.getElementById('langTcDesk').className = "px-3 py-1 text-xs font-bold text-gray-500 hover:bg-cyan-400 hover:text-black transition";
+                document.getElementById('langEnMob').className = "text-xs font-bold text-cyan-400 border border-cyan-400 px-2 py-1";
+                document.getElementById('langTcMob').className = "text-xs font-bold text-gray-500 border border-gray-700 px-2 py-1";
+            } else {
+                document.getElementById('langEnDesk').className = "px-3 py-1 text-xs font-bold text-gray-500 hover:bg-cyan-400 hover:text-black transition";
+                document.getElementById('langTcDesk').className = "px-3 py-1 text-xs font-bold bg-cyan-900/50 text-cyan-400 hover:bg-cyan-400 hover:text-black transition";
+                document.getElementById('langEnMob').className = "text-xs font-bold text-gray-500 border border-gray-700 px-2 py-1";
+                document.getElementById('langTcMob').className = "text-xs font-bold text-cyan-400 border border-cyan-400 px-2 py-1";
+            }
+
+            // 更新文本
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (i18n[lang][key]) {
+                    if (element.innerHTML.includes('<') && !element.hasAttribute('data-text')) {
+                         element.innerHTML = i18n[lang][key]; // 允許 HTML 標籤
+                    } else if (element.classList.contains('glitch-text')) {
+                        // 特殊處理故障文字，更新 data-text 屬性和內容
+                        element.setAttribute('data-text', i18n[lang][key].replace(/<[^>]*>?/gm, ''));
+                        element.innerHTML = i18n[lang][key];
+                    } else {
+                        element.innerText = i18n[lang][key];
+                    }
+                }
+            });
+        }
+
+        // 菜單邏輯
+        const body = document.body;
         
-        function openMobileMenu() {
-            mobileMenu.classList.add('open');
-            mobileMenuOverlay.classList.add('open');
+        function toggleMobileMenu() {
+            body.classList.toggle('mobile-menu-open');
+            if (body.classList.contains('mobile-menu-open')) {
+                body.style.overflow = 'hidden';
+            } else {
+                body.style.overflow = '';
+            }
+        }
+
+        // Modal Logic
+        function openParkModal(parkId) {
+            const data = parkDetails[parkId];
+            if (!data) return;
+
+            const modal = document.getElementById('parkModal');
+            const modalBody = document.getElementById('modalBody');
+            
+            // Build content
+            modalBody.innerHTML = `
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="w-full md:w-1/2">
+                        <img src="${data.image}" class="w-full h-64 object-cover rounded border border-cyan-500/50 shadow-[0_0_20px_rgba(0,243,255,0.2)] mb-6">
+                        <div class="grid grid-cols-3 gap-4 mb-6">
+                            ${data.specs.map(spec => `
+                                <div class="bg-gray-900/80 p-3 border border-gray-700 text-center">
+                                    <div class="text-[10px] text-gray-500 tracking-widest mb-1">${spec.label}</div>
+                                    <div class="text-cyan-400 font-bold text-sm">${spec.value}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2">
+                        <h2 class="font-cyber text-2xl md:text-3xl font-bold text-white mb-1">${data.title}</h2>
+                        <div class="text-purple-400 font-mono text-sm mb-6">${data.subtitle}</div>
+                        <p class="text-gray-300 text-sm leading-relaxed mb-6 border-l-2 border-cyan-500 pl-4">${data.desc}</p>
+                        
+                        <h4 class="font-cyber text-white mb-4 border-b border-gray-700 pb-2">CORE FEATURES</h4>
+                        <ul class="space-y-4 text-sm text-gray-400">
+                            ${data.features.map(feat => `
+                                <li class="flex items-start gap-3">
+                                    <i class="fas fa-caret-right text-cyan-400 mt-1"></i>
+                                    <span>${feat}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                        
+                        <button class="mt-8 w-full btn-cyber py-3 font-bold" onclick="closeParkModal()">INITIALIZE SIMULATION</button>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
-        
-        function closeMobileMenu() {
-            mobileMenu.classList.remove('open');
-            mobileMenuOverlay.classList.remove('open');
-            document.body.style.overflow = 'auto';
+
+        function closeParkModal() {
+            const modal = document.getElementById('parkModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
         }
-        
-        mobileMenuBtn.addEventListener('click', openMobileMenu);
-        mobileMenuClose.addEventListener('click', closeMobileMenu);
-        mobileMenuOverlay.addEventListener('click', closeMobileMenu);
-        
-        // Close mobile menu when clicking on menu links
-        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
-        mobileMenuLinks.forEach(link => {
-            link.addEventListener('click', closeMobileMenu);
-        });
-        
-        // Navbar scroll effect
-        const navbar = document.querySelector('.navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.style.background = 'rgba(0, 0, 0, 0.98)';
-            } else {
-                navbar.style.background = 'rgba(0, 0, 0, 0.95)';
+
+        // Close modal on outside click
+        document.getElementById('parkModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeParkModal();
             }
         });
-        
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-        
-        // Enhanced Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-        
-        // Observe elements for animation
-        document.querySelectorAll('.glass-card, .experience-card, .park-card, .feature-card').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-            observer.observe(el);
-        });
-        
-        // Countdown Timer
-        function updateCountdown() {
-            const targetDate = new Date('2027-06-15T10:00:00Z'); // Tokyo opening date
-            const now = new Date();
-            const difference = targetDate - now;
-            
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-            
-            document.getElementById('days').textContent = days;
-            document.getElementById('hours').textContent = hours;
-            document.getElementById('minutes').textContent = minutes;
-            document.getElementById('seconds').textContent = seconds;
-        }
-        
-        // Update countdown every second
-        setInterval(updateCountdown, 1000);
-        updateCountdown(); // Initial call
-        
-        // Enhanced card interactions
-        document.querySelectorAll('.experience-card, .park-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-15px) scale(1.03)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-        
-        // Park visual interaction
-        const parkVisual = document.querySelector('.park-visual');
-        if (parkVisual) {
-            parkVisual.addEventListener('mousemove', (e) => {
-                const rect = parkVisual.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                
-                const rotateX = (y / rect.height) * 10;
-                const rotateY = -(x / rect.width) * 10;
-                
-                parkVisual.style.transform = `rotateX(${15 + rotateX}deg) rotateY(${-10 + rotateY}deg) scale(1.02)`;
-            });
-            
-            parkVisual.addEventListener('mouseleave', () => {
-                parkVisual.style.transform = 'rotateX(15deg) rotateY(-10deg) scale(1)';
-            });
-        }
-        
-        // Dynamic stats animation for ticket prices
-        function animateValue(element, start, end, duration) {
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                const value = Math.floor(progress * (end - start) + start);
-                element.textContent = '$' + value;
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                }
-            };
-            window.requestAnimationFrame(step);
-        }
-        
-        // Animate price values when they come into view
-        const priceObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const priceElement = entry.target;
-                    const finalPrice = parseInt(priceElement.textContent.replace(/[^0-9]/g, ''));
-                    animateValue(priceElement, 0, finalPrice, 2000);
-                    priceObserver.unobserve(entry.target);
-                }
-            });
-        });
-        
-        // Observe price elements
-        document.querySelectorAll('.text-4xl.font-bold').forEach(el => {
-            if (el.textContent.includes('$')) {
-                priceObserver.observe(el);
-            }
-        });
-        
-        // Enhanced button interactions
-        document.querySelectorAll('.btn-primary, .btn-secondary').forEach(button => {
-            button.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-3px) scale(1.02)';
-            });
-            
-            button.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-            
-            button.addEventListener('mousedown', function() {
-                this.style.transform = 'translateY(-1px) scale(0.98)';
-            });
-            
-            button.addEventListener('mouseup', function() {
-                this.style.transform = 'translateY(-3px) scale(1.02)';
-            });
-        });
-        
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            // Fade in page
-            document.body.style.opacity = '1';
-            
-            console.log('World404 Theme Parks page loaded successfully 🎢');
-        });
-        
-        // Add loading state management
-        window.addEventListener('load', function() {
-            // Hide any loading indicators
-            document.body.classList.add('loaded');
-            
-            // Start delayed animations
-            setTimeout(() => {
-                document.querySelectorAll('.glass-card').forEach((card, index) => {
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, index * 100);
-                });
-            }, 500);
-        });
-        
-        // Add special effects for park opening countdown
-        function addCountdownEffects() {
-            const countdownSection = document.querySelector('.countdown-timer');
-            if (countdownSection) {
-                // Add sparkle effects when countdown updates
-                setInterval(() => {
-                    const sparkle = document.createElement('div');
-                    sparkle.innerHTML = '✨';
-                    sparkle.style.position = 'absolute';
-                    sparkle.style.left = Math.random() * 100 + '%';
-                    sparkle.style.top = Math.random() * 100 + '%';
-                    sparkle.style.fontSize = '1rem';
-                    sparkle.style.opacity = '0.8';
-                    sparkle.style.animation = 'sparkle 2s ease-out forwards';
-                    sparkle.style.pointerEvents = 'none';
-                    
-                    countdownSection.style.position = 'relative';
-                    countdownSection.appendChild(sparkle);
-                    
-                    setTimeout(() => {
-                        sparkle.remove();
-                    }, 2000);
-                }, 3000);
-            }
-        }
-        
-        // Add CSS for sparkle animation
-        const sparkleCSS = document.createElement('style');
-        sparkleCSS.textContent = `
-            @keyframes sparkle {
-                0% {
-                    opacity: 0.8;
-                    transform: scale(0) rotate(0deg);
-                }
-                50% {
-                    opacity: 1;
-                    transform: scale(1.2) rotate(180deg);
-                }
-                100% {
-                    opacity: 0;
-                    transform: scale(0) rotate(360deg);
-                }
-            }
-        `;
-        document.head.appendChild(sparkleCSS);
-        
-        // Initialize special effects
-        addCountdownEffects();
+
     </script>
 </body>
 </html>
