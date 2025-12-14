@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>404WORLD | Powered by AIF.GLASS</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <!-- 替换为支持新特性的 Tailwind 脚本，修复移动端样式和层级问题 -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Syncopate:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <style>
@@ -34,6 +35,11 @@
         /* 字体 */
         .font-cyber { font-family: 'Syncopate', sans-serif; }
         .font-tech { font-family: 'Rajdhani', sans-serif; }
+
+        /* 强制覆盖层级，确保菜单可点击 */
+        #mobileMenuContainer {
+            z-index: 2147483647 !important; /* 最高层级 */
+        }
 
         /* HUD 风格容器 */
         .hud-panel {
@@ -124,7 +130,7 @@
             background: linear-gradient(to bottom, transparent 50%, rgba(0, 255, 255, 0.02) 51%);
             background-size: 100% 4px;
             pointer-events: none;
-            z-index: 9999;
+            z-index: 999;
         }
 
         /* 按钮样式 */
@@ -155,27 +161,6 @@
             background: var(--neon-purple);
             color: #fff;
             box-shadow: 0 0 20px var(--neon-purple);
-        }
-
-        /* 移动端菜单修正 */
-        .mobile-menu-drawer {
-            transform: translateX(100%);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            background-color: #050505; /* Ensure solid background */
-            border-left: 1px solid var(--neon-cyan);
-        }
-        .mobile-menu-open .mobile-menu-drawer {
-            transform: translateX(0);
-        }
-        .mobile-menu-overlay {
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-            background-color: rgba(0,0,0,0.9); /* Darker overlay */
-        }
-        .mobile-menu-open .mobile-menu-overlay {
-            opacity: 1;
-            pointer-events: auto;
         }
 
         /* 3D 旋转模型容器 */
@@ -244,8 +229,8 @@
     <!-- 全局扫描线特效 -->
     <div class="scanline"></div>
 
-    <!-- 导航栏 -->
-    <nav class="fixed w-full top-0 z-50 bg-black/90 backdrop-blur-lg border-b border-white/10">
+    <!-- 导航栏 (Fix: Changed to absolute so it scrolls with page content) -->
+    <nav class="absolute w-full top-0 z-50 bg-black/90 backdrop-blur-lg border-b border-white/10">
         <div class="container mx-auto px-4 h-20 flex justify-between items-center">
             <!-- LOGO -->
             <a href="#" class="flex items-center gap-3 group">
@@ -277,36 +262,39 @@
                 </button>
             </div>
 
-            <!-- 移动端汉堡菜单按钮 -->
-            <button onclick="toggleMobileMenu()" class="lg:hidden text-2xl text-white hover:text-cyan-400 transition z-50 relative">
+            <!-- 移动端汉堡菜单按钮 (Fix: Added p-2 for touch area and high z-index) -->
+            <button onclick="toggleMobileMenu()" class="lg:hidden text-2xl text-white hover:text-cyan-400 transition z-50 relative p-2 focus:outline-none">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
     </nav>
 
-    <!-- 移动端侧边栏 - Z-Index 修正 -->
-    <div id="mobileMenuContainer" class="relative z-[100]">
-        <div class="mobile-menu-overlay fixed inset-0 bg-black/90 z-[101]" onclick="toggleMobileMenu()"></div>
-        <div class="mobile-menu-drawer fixed top-0 right-0 w-[85%] max-w-sm h-full bg-[#050505] z-[102] p-8 flex flex-col shadow-[0_0_50px_rgba(0,243,255,0.2)]">
+    <!-- 移动端侧边栏 (Fix: Completely new structure with high z-index and click handlers, matches index.html) -->
+    <div id="mobileMenuContainer" class="fixed inset-0 hidden">
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-black/90 transition-opacity duration-300 opacity-0" id="mobileMenuOverlay" onclick="toggleMobileMenu()"></div>
+        
+        <!-- Drawer -->
+        <div class="absolute top-0 right-0 w-[85%] max-w-sm h-full bg-[#050505] border-l border-cyan-400 p-8 flex flex-col shadow-[0_0_50px_rgba(0,243,255,0.2)] transform translate-x-full transition-transform duration-300" id="mobileMenuDrawer">
             <div class="flex justify-between items-center mb-12 border-b border-gray-800 pb-4">
                 <span class="font-cyber text-2xl text-white">SYSTEM <span class="text-cyan-400">MENU</span></span>
-                <button onclick="toggleMobileMenu()" class="text-gray-400 text-2xl hover:text-white"><i class="fas fa-times"></i></button>
+                <button onclick="toggleMobileMenu()" class="text-gray-400 text-2xl hover:text-white p-2"><i class="fas fa-times"></i></button>
             </div>
             
             <div class="flex flex-col space-y-8 font-cyber text-xl">
-                <a href="#glass" onclick="toggleMobileMenu()" class="flex items-center gap-4 hover:text-cyan-400 transition group">
+                <a href="#glass" onclick="toggleMobileMenu()" class="flex items-center gap-4 hover:text-cyan-400 transition group block">
                     <div class="w-8 h-8 flex items-center justify-center border border-gray-700 group-hover:border-cyan-400 rounded"><i class="fas fa-glasses text-sm text-gray-500 group-hover:text-cyan-400"></i></div> 
                     <span data-i18n="nav_glass">AIF.GLASS</span>
                 </a>
-                <a href="#experiences" onclick="toggleMobileMenu()" class="flex items-center gap-4 hover:text-cyan-400 transition group">
+                <a href="#experiences" onclick="toggleMobileMenu()" class="flex items-center gap-4 hover:text-cyan-400 transition group block">
                      <div class="w-8 h-8 flex items-center justify-center border border-gray-700 group-hover:border-cyan-400 rounded"><i class="fas fa-gamepad text-sm text-gray-500 group-hover:text-cyan-400"></i></div>
                      <span data-i18n="nav_experiences">MODULES</span>
                 </a>
-                <a href="#parks" onclick="toggleMobileMenu()" class="flex items-center gap-4 hover:text-cyan-400 transition group">
+                <a href="#parks" onclick="toggleMobileMenu()" class="flex items-center gap-4 hover:text-cyan-400 transition group block">
                      <div class="w-8 h-8 flex items-center justify-center border border-gray-700 group-hover:border-cyan-400 rounded"><i class="fas fa-globe text-sm text-gray-500 group-hover:text-cyan-400"></i></div>
                      <span data-i18n="nav_parks">LOCATIONS</span>
                 </a>
-                <a href="#tickets" onclick="toggleMobileMenu()" class="flex items-center gap-4 hover:text-cyan-400 transition group">
+                <a href="#tickets" onclick="toggleMobileMenu()" class="flex items-center gap-4 hover:text-cyan-400 transition group block">
                      <div class="w-8 h-8 flex items-center justify-center border border-gray-700 group-hover:border-cyan-400 rounded"><i class="fas fa-ticket-alt text-sm text-gray-500 group-hover:text-cyan-400"></i></div>
                      <span data-i18n="nav_tickets">ACCESS</span>
                 </a>
@@ -315,12 +303,13 @@
             <div class="mt-auto pt-8 border-t border-gray-800">
                 <div class="flex items-center justify-between mb-6">
                     <span class="text-xs text-gray-500 tracking-widest">INTERFACE LANGUAGE</span>
+                    <!-- Mobile Language Buttons with Fix IDs -->
                     <div class="flex gap-2">
-                        <button onclick="setLang('en')" id="langEnMob" class="text-xs font-bold text-cyan-400 border border-cyan-400 px-2 py-1">EN</button>
-                        <button onclick="setLang('tc')" id="langTcMob" class="text-xs font-bold text-gray-500 border border-gray-700 px-2 py-1">繁體</button>
+                        <button onclick="setLang('en')" id="langEnMob" class="text-xs font-bold text-cyan-400 border border-cyan-400 px-3 py-2 transition-colors">EN</button>
+                        <button onclick="setLang('tc')" id="langTcMob" class="text-xs font-bold text-gray-500 border border-gray-700 px-3 py-2 transition-colors">繁體</button>
                     </div>
                 </div>
-                <button class="btn-cyber w-full py-4 font-bold" data-i18n="btn_connect">INITIALIZE LINK</button>
+                <button onclick="toggleMobileMenu()" class="btn-cyber w-full py-4 font-bold block" data-i18n="btn_connect">INITIALIZE LINK</button>
             </div>
         </div>
     </div>
@@ -793,7 +782,6 @@
     <script>
         const i18n = {
             en: {
-                // ... (Previous translations kept same)
                 nav_glass: "AIF.GLASS",
                 nav_experiences: "MODULES",
                 nav_parks: "LOCATIONS",
@@ -979,13 +967,13 @@
             if(lang === 'en') {
                 document.getElementById('langEnDesk').className = "px-3 py-1 text-xs font-bold bg-cyan-900/50 text-cyan-400 hover:bg-cyan-400 hover:text-black transition";
                 document.getElementById('langTcDesk').className = "px-3 py-1 text-xs font-bold text-gray-500 hover:bg-cyan-400 hover:text-black transition";
-                document.getElementById('langEnMob').className = "text-xs font-bold text-cyan-400 border border-cyan-400 px-2 py-1";
-                document.getElementById('langTcMob').className = "text-xs font-bold text-gray-500 border border-gray-700 px-2 py-1";
+                document.getElementById('langEnMob').className = "text-xs font-bold text-cyan-400 border border-cyan-400 px-2 py-1 transition-colors";
+                document.getElementById('langTcMob').className = "text-xs font-bold text-gray-500 border border-gray-700 px-2 py-1 transition-colors";
             } else {
                 document.getElementById('langEnDesk').className = "px-3 py-1 text-xs font-bold text-gray-500 hover:bg-cyan-400 hover:text-black transition";
                 document.getElementById('langTcDesk').className = "px-3 py-1 text-xs font-bold bg-cyan-900/50 text-cyan-400 hover:bg-cyan-400 hover:text-black transition";
-                document.getElementById('langEnMob').className = "text-xs font-bold text-gray-500 border border-gray-700 px-2 py-1";
-                document.getElementById('langTcMob').className = "text-xs font-bold text-cyan-400 border border-cyan-400 px-2 py-1";
+                document.getElementById('langEnMob').className = "text-xs font-bold text-gray-500 border border-gray-700 px-2 py-1 transition-colors";
+                document.getElementById('langTcMob').className = "text-xs font-bold text-cyan-400 border border-cyan-400 px-2 py-1 transition-colors";
             }
 
             // 更新文本
@@ -993,9 +981,8 @@
                 const key = element.getAttribute('data-i18n');
                 if (i18n[lang][key]) {
                     if (element.innerHTML.includes('<') && !element.hasAttribute('data-text')) {
-                         element.innerHTML = i18n[lang][key]; // 允許 HTML 標籤
+                         element.innerHTML = i18n[lang][key];
                     } else if (element.classList.contains('glitch-text')) {
-                        // 特殊處理故障文字，更新 data-text 屬性和內容
                         element.setAttribute('data-text', i18n[lang][key].replace(/<[^>]*>?/gm, ''));
                         element.innerHTML = i18n[lang][key];
                     } else {
@@ -1005,15 +992,31 @@
             });
         }
 
-        // 菜單邏輯
-        const body = document.body;
-        
+        // Mobile Menu Logic
         function toggleMobileMenu() {
-            body.classList.toggle('mobile-menu-open');
-            if (body.classList.contains('mobile-menu-open')) {
-                body.style.overflow = 'hidden';
+            const container = document.getElementById('mobileMenuContainer');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            const drawer = document.getElementById('mobileMenuDrawer');
+            
+            if (container.classList.contains('hidden')) {
+                // Open
+                container.classList.remove('hidden');
+                // Force reflow
+                void container.offsetWidth;
+                
+                overlay.classList.remove('opacity-0');
+                drawer.classList.remove('translate-x-full');
+                document.body.style.overflow = 'hidden';
             } else {
-                body.style.overflow = '';
+                // Close
+                overlay.classList.add('opacity-0');
+                drawer.classList.add('translate-x-full');
+                document.body.style.overflow = '';
+                
+                // Wait for transition to finish before hiding
+                setTimeout(() => {
+                    container.classList.add('hidden');
+                }, 300);
             }
         }
 
